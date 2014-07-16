@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include <iostream>
+#include <string>
 #include <time.h>
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -12,41 +13,86 @@ int _tmain(int argc, _TCHAR* argv[])
 	char inputCharToNum;
 	int inputNum;
 	int randNum;
+	int select;
+	int destroyCnt = 0;
 
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
+	std::string shipList[] = { "Aircraft", "BattleShip", "Cruiser", "Destroyer", "Destroyer" };
+	std::string result[] = { "HIT!!", "MISS!!", "DESTROY!!" };
 
-	while (1)
+	while (true)
 	{
-		std::cout << "input character(A~H) : ";
-		std::cin >> inputChar;
+		while (true)
+		{
+			std::cout << "input character(A~H) : ";
+			std::cin >> inputChar;
 
-		if (inputChar >= 'A' && inputChar <= 'H') break;
+			if (inputChar >= 'A' && inputChar <= 'H') break;
+		}
+
+		while (true)
+		{
+			std::cout << "input number(1~8) : ";
+			std::cin >> inputCharToNum;
+			inputNum = atoi(&inputCharToNum);
+
+			if (inputNum >= 1 && inputNum <= 8) break;
+		}
+
+
+
+
+		randNum = rand() % _countof(result);
+
+		for (int i = 0; i < _countof(shipList); i++)
+		{
+			if (!shipList[i].empty())
+			{
+				printf_s("%s  ", shipList[i].c_str());
+			}
+
+		}
+		printf_s("\n");
+
+		if (randNum == 0)
+		{
+			std::cout << result[randNum] << std::endl;
+		}
+		else if (randNum == 1)
+		{
+			std::cout << result[randNum] << std::endl;
+		}
+		else
+		{
+			
+
+			while (true)
+			{
+				select = rand() % _countof(shipList);
+				if (!shipList[select].empty())
+				{
+					printf_s("%s Destroy!!\n", shipList[select].c_str());
+
+					shipList[select] = "";
+				
+					destroyCnt++;
+					break;
+				}
+
+
+			}
+
+		}
+		if (destroyCnt == _countof(shipList))
+		{
+			printf_s("Á¾·á!\n");
+			break;
+		}
+		printf_s("\n");
 	}
 
-	while (1)
-	{
-		std::cout << "input number(1~8) : ";
-		std::cin >> inputCharToNum;
-		inputNum = atoi(&inputCharToNum);
-
-		if (inputNum >= 1 && inputNum <= 8) break;
-	}
-
-
-	randNum = rand() % 3;
-	if (randNum == 0)
-	{
-		std::cout << "Hit!!" << std::endl;
-	}
-	else if (randNum == 1)
-	{
-		std::cout << "Miss!" << std::endl;
-	}
-	else
-	{
-		std::cout << "Destroy!!!" << std::endl;
-	}
-
+	getchar();
+	getchar();
 
 
 	return 0;
