@@ -5,10 +5,19 @@
 #include <iostream>
 #include <string>
 #include <time.h>
+#include "Ship.h"
+#include "Aircraft.h"
+#include "Battleship.h"
 
 int _tmain(int argc, _TCHAR* argv[])
 {
 	argc, argv;
+	
+	CAircraft aircraft;
+	
+	aircraft.PrintHP();
+
+/*
 	char inputChar;
 	char inputCharToNum;
 	int inputNum;
@@ -89,7 +98,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			break;
 		}
 		printf_s("\n");
-	}
+	}*/
 
 	getchar();
 	getchar();
