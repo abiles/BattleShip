@@ -1,10 +1,10 @@
 #pragma once
 #include "Ship.h"
-class Battleship :
+class Crusier :
 	public Ship
 {
 public:
-	Battleship();
-		~Battleship();
+	Crusier();
+	~Crusier();
 };
 

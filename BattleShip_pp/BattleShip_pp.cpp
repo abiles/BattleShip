@@ -6,16 +6,17 @@
 #include <string>
 #include <time.h>
 #include "Ship.h"
-#include "Aircraft.h"
-#include "Battleship.h"
+#include "Player.h"
 
 int _tmain(int argc, _TCHAR* argv[])
 {
 	argc, argv;
 	
-	CAircraft aircraft;
-	
-	aircraft.PrintHP();
+	Player player;
+	player.SetupShips();
+	player.PrintShips();
+	getchar();
+
 
 /*
 	char inputChar;
@@ -100,8 +101,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		printf_s("\n");
 	}*/
 
-	getchar();
-	getchar();
+
 
 
 	return 0;

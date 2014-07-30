@@ -7,6 +7,8 @@ struct Position
 {
 	char x;
 	char y;
+
+	//왜 캐릭터?
 };
 
 enum ShipType
@@ -16,6 +18,7 @@ enum ShipType
 	BATTLESHIP,
 	CRUISER,
 	DESTROYER,
+
 };
 
 enum HitResult
@@ -27,17 +30,8 @@ enum HitResult
 	BATTLESHIP_DESTROYED,
 	CRUISER_DESTROYED,
 	DESTROYER_DESTROYED,
-};
 
-enum Direction
-{
-	DIRECTION_NONE,
-	NORTH,
-	EAST,
-	SOUTH,
-	WEST,
 };
-
 
 class Ship
 {
@@ -45,25 +39,19 @@ public:
 	Ship();
 	~Ship();
 
+public:
 
 	HitResult HitCheck(Position hitPos);
-	int GetHP(){ return m_HP; }
-	int GetSize(){ return m_Size; }
-	std::string GetName(){ return m_Name; }
-
-	void AddPosition(Position pos);
-	void AddPosition(char x, char y);
-	Position GetPos(int i){ return m_Pos[i]; }
-	void PrintHP();
-	void Print();
+	int GetHP() { return m_HP; }
+	//어떤 포지션 값을 받아서 m_pos에 차례대로 넣겠다. 
+	void AddPosition(Position Pos);
 
 protected:
-	
+
 	std::string m_Name;
+	Position m_Pos[MAX_SHIP_LENGTH];
 	ShipType m_Type;
-	Position m_Pos[MAX_SHIP_LENGTH]; 
 	int m_HP;
-	int m_Size;
 
 };
-			
+

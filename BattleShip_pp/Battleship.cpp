@@ -2,14 +2,15 @@
 #include "Battleship.h"
 
 
-CBattleship::CBattleship()
+Battleship::Battleship()
 {
 	m_HP = 4;
+	m_Size = 4;
 	m_Name = "Battleship";
 	m_Type = BATTLESHIP;
 }
 
 
-CBattleship::~CBattleship()
+Battleship::~Battleship()
 {
 }
