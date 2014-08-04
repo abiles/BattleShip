@@ -28,7 +28,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	srand((unsigned int)time(NULL));
 	std::string shipList[] = { "Aircraft", "BattleShip", "Cruiser", "Destroyer", "Destroyer" };
-	std::string result[] = { "HIT!!", "MISS!!", "DESTROY!!" };
+	std::string result[] = { "HIT!!", "MISS!!", "DESTROY!!" };i
 
 	while (true)
 	{
