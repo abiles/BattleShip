@@ -22,6 +22,19 @@ enum ShipDirection
 	MAX_DIRECTION,
 };
 
+enum ShipHP
+{
+	HP_ZERO,
+	HP_ONE,
+	DESTROYER_HP,
+	CRUISER_HP,
+	BATTLESHIP_HP,
+	AIRCRAFT_HP,
+	MAX_HP,
+	//이건 고민
+	
+};
+
 struct ShipPos
 {
 	char x;
@@ -30,7 +43,13 @@ struct ShipPos
 
 enum ShipSize
 {
-	MAX_SHIP_SIZE = 5,
+	SHIP_SIZE_ZERO,
+	SHIP_SIZE_ONE, //추후 한칸짜리 추가 가능 공간
+	DESTROYER_SIZE,
+	CRUISER_SIZE,
+	BATTLESHIP_SZIE,
+	AIRCRAFT_SIZE,
+	MAX_SHIP_SIZE,
 };
 
 enum ShipType
