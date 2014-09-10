@@ -12,6 +12,25 @@ enum HitResult
 	DESTROYER_DESTROY,
 };
 
+enum MapMark
+{
+	SHIP_LAUNCH = 1,
+};
+
+enum MapSize
+{
+	HORIZONTAL_ZERO = 0,
+	VERTICAL_ZERO = 0,
+	MAX_HORIZONTAL = 8,
+	MAX_VERTICAL = 8,
+};
+
+enum OverLapCheck
+{
+	WRONGINPUT = -1,
+	OVERLAP = 0,
+	OVERLAP_NONE = 1,
+};
 
 enum ShipDirection
 {
@@ -54,22 +73,14 @@ enum ShipSize
 
 enum ShipType
 {
-	SHIP_NONE,
+	SHIP_TYPE_NONE,
 	AIRCRAFT,
 	BATTLESHIP,
 	CRUISER,
 	DESTROYER,
+	SHIP_TYPE_END,
+
 };
 
 
-enum MapMark
-{
-	SHIP_LAUNCH = 1,
-};
-
-enum MapSize
-{
-	MAX_HORIZONTAL = 8,
-	MAX_VERTICAL = 8,
-};
 
