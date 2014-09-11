@@ -8,6 +8,7 @@ public:
 	Ship();
 	virtual ~Ship();
 
+	
 public:
 	int				  GetSize() const { return m_Size; }
 	void			  SetSize(int _size);
@@ -23,12 +24,16 @@ public:
 
 	ShipPos			  GetPos(int posIdx);
 	bool			  AddPos(ShipPos inputPos, int posIdx);
-
+	bool			  IsPosFull();
 	OverLapCheck 	  IsOverlap(ShipPos inputPos);
+	void			  InitPos();
 
+	ShipPos			  GetDirPos(ShipDirection inputDir);
 	void		      MakeDir();
 
+	void			  HitResultApply();
 	virtual HitResult CheckAttack(ShipPos attackedPos);
+	void			  PrintShipPos();
 
 protected:
 	int			m_Size;

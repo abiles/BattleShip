@@ -10,11 +10,15 @@ enum HitResult
 	BATTLESHIP_DESTROY,
 	CRUISER_DESTROY,
 	DESTROYER_DESTROY,
+	HITREUSLT_MAX,
 };
 
-enum MapMark
+enum MapState
 {
-	SHIP_LAUNCH = 1,
+	MAP_NONE,
+	SHIP_LAUNCH,
+	SHIP_ATTACEKED,
+	MISSED_ATTACK,
 };
 
 enum MapSize
@@ -81,6 +85,7 @@ enum ShipType
 	SHIP_TYPE_END,
 
 };
+
 
 
 

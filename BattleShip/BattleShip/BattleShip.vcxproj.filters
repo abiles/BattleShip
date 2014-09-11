@@ -21,16 +21,58 @@
     <ClInclude Include="Ship.h">
       <Filter>Ship</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Aircraft.h">
+      <Filter>Ship</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleShip.h">
+      <Filter>Ship</Filter>
+    </ClInclude>
+    <ClInclude Include="Cruiser.h">
+      <Filter>Ship</Filter>
+    </ClInclude>
+    <ClInclude Include="Destroyer.h">
+      <Filter>Ship</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BattleShip.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Ship.cpp">
       <Filter>Ship</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleShipMain.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Aircraft.cpp">
+      <Filter>Ship</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleShip.cpp">
+      <Filter>Ship</Filter>
+    </ClCompile>
+    <ClCompile Include="Cruiser.cpp">
+      <Filter>Ship</Filter>
+    </ClCompile>
+    <ClCompile Include="Destroyer.cpp">
+      <Filter>Ship</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -62,10 +62,11 @@ void Ship::SetShipType(ShipType inputShipType)
 
 void Ship::MakeDir()
 {
-	m_ShipDir[NORTH] = { 0, -1 };
-	m_ShipDir[EAST]  = { 1,  0 };
-	m_ShipDir[SOUTH] = { 0,  1 };
-	m_ShipDir[WEST]  = { 1,  0 };
+	m_ShipDir[NORTH]		  = { 0, -1 };
+	m_ShipDir[EAST]			  = { 1,  0 };
+	m_ShipDir[SOUTH]		  = { 0,  1 };
+	m_ShipDir[WEST]			  = { 1,  0 };
+	
 }
 
 ShipPos Ship::GetPos(int posIdx)
@@ -74,8 +75,8 @@ ShipPos Ship::GetPos(int posIdx)
 	if (!(posIdx < MAX_SHIP_SIZE && posIdx >= 0))
 	{
 		ShipPos none_Pos;
-		none_Pos.x = 0;
-		none_Pos.y = 0;
+		none_Pos.x = -1;
+		none_Pos.y = -1;
 
 		return none_Pos;
 	}
@@ -85,25 +86,25 @@ ShipPos Ship::GetPos(int posIdx)
 
 bool Ship::AddPos(ShipPos inputPos, int posIdx)
 {
-	_ASSERT(inputPos.x <= MAX_HORIZONTAL &&
-			inputPos.x > HORIZONTAL_ZERO);
-	_ASSERT(inputPos.y <= MAX_VERTICAL &&
-			inputPos.y > VERTICAL_ZERO);
+	_ASSERT(inputPos.x < MAX_HORIZONTAL &&
+			inputPos.x >= HORIZONTAL_ZERO);
+	_ASSERT(inputPos.y < MAX_VERTICAL &&
+			inputPos.y >= VERTICAL_ZERO);
 	_ASSERT(posIdx < MAX_SHIP_SIZE && posIdx >= 0);
 
-	if (!(inputPos.x <= MAX_HORIZONTAL &&
-		inputPos.x > HORIZONTAL_ZERO))
+	if (!(inputPos.x < MAX_HORIZONTAL &&
+		inputPos.x >= HORIZONTAL_ZERO))
 	{
-		inputPos.x = 0;
-		inputPos.y = 0;
+		inputPos.x = -1;
+		inputPos.y = -1;
 		m_Pos[posIdx] = inputPos;
 		return false;
 	}
-	if (!(inputPos.y <= MAX_VERTICAL &&
-		inputPos.y > VERTICAL_ZERO))
+	if (!(inputPos.y < MAX_VERTICAL &&
+		inputPos.y >= VERTICAL_ZERO))
 	{
-		inputPos.x = 0;
-		inputPos.y = 0;
+		inputPos.x = -1;
+		inputPos.y = -1;
 		m_Pos[posIdx] = inputPos;
 		return false;
 	}
@@ -117,20 +118,35 @@ bool Ship::AddPos(ShipPos inputPos, int posIdx)
 
 }
 
+bool Ship::IsPosFull()
+{
+	
+	for (int i = 0; i < m_Size; ++i)
+	{
+		if (m_Pos[i].x == -1 || m_Pos[i].y == -1)
+		{
+			return false;
+		}
+	}
+
+	return true;
+	
+}
+
 OverLapCheck Ship::IsOverlap(ShipPos inputPos)
 {
-	_ASSERT(inputPos.x <= MAX_HORIZONTAL &&
-		inputPos.x > HORIZONTAL_ZERO);
-	_ASSERT(inputPos.y <= MAX_VERTICAL &&
-		inputPos.y > VERTICAL_ZERO);
+	_ASSERT(inputPos.x < MAX_HORIZONTAL &&
+		inputPos.x >= HORIZONTAL_ZERO);
+	_ASSERT(inputPos.y < MAX_VERTICAL &&
+		inputPos.y >= VERTICAL_ZERO);
 
-	if (!(inputPos.x <= MAX_HORIZONTAL &&
-		inputPos.x > HORIZONTAL_ZERO))
+	if (!(inputPos.x  < MAX_HORIZONTAL &&
+		inputPos.x >= HORIZONTAL_ZERO))
 	{
 		return WRONGINPUT;
 	}
-	if (!(inputPos.y <= MAX_VERTICAL &&
-		inputPos.y > VERTICAL_ZERO))
+	if (!(inputPos.y < MAX_VERTICAL &&
+		inputPos.y >= VERTICAL_ZERO))
 	{
 		
 		return WRONGINPUT;
@@ -146,6 +162,85 @@ OverLapCheck Ship::IsOverlap(ShipPos inputPos)
 	}
 
 	return OVERLAP_NONE;
+}
+
+ShipPos Ship::GetDirPos(ShipDirection inputDir)
+{
+	_ASSERT(inputDir < MAX_DIRECTION && inputDir >= NORTH);
+	if (!(inputDir < MAX_DIRECTION && inputDir >= NORTH))
+	{
+		ShipPos none_Pos;
+		none_Pos.x = -1;
+		none_Pos.y = -1;
+		return  none_Pos;
+	}
+
+	return m_ShipDir[inputDir];
+
+}
+
+void Ship::InitPos()
+{
+	for (int i = 0; i < m_Size; ++i)
+	{
+		m_Pos[i].x = -1;
+		m_Pos[i].y = -1;
+	}
+}
+
+HitResult Ship::CheckAttack(ShipPos attackedPos)
+{
+	_ASSERT(attackedPos.x < MAX_HORIZONTAL && attackedPos.x >= HORIZONTAL_ZERO);
+	_ASSERT(attackedPos.y < MAX_VERTICAL && attackedPos.y >= VERTICAL_ZERO);
+	if (!(attackedPos.x < MAX_HORIZONTAL &&
+		attackedPos.x >= HORIZONTAL_ZERO))
+	{
+		return HIT_NONE;
+	}
+	if (!(attackedPos.y < MAX_VERTICAL &&
+		attackedPos.y >= VERTICAL_ZERO))
+	{
+		return HIT_NONE;
+	}
+
+	for (int i = 0; i < this->GetSize(); ++i)
+	{
+		if (this->GetPos(i).x == attackedPos.x && this->GetPos(i).y == attackedPos.y)
+		{
+			this->HitResultApply();
+
+			if (this->GetHP() == 0)
+			{
+				return DESTROY;
+			}
+
+
+			return HIT;
+		}
+	}
+
+	return HIT_NONE;
+}
+
+void Ship::HitResultApply()
+{
+	--m_HP;
+}
+
+void Ship::PrintShipPos()
+{
+	printf_s("%s\t:\t", m_ShipName.c_str());
+
+	for (int i = 0; i < m_Size; ++i)
+	{
+		if (m_Pos[i].x == 0)
+		{
+			break;
+		}
+		printf_s("%c%c\t", m_Pos[i].x, m_Pos[i].y);
+	}
+
+	printf_s("\n");
 }
 
 
