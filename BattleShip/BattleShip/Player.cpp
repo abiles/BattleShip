@@ -475,4 +475,13 @@ void Player::InitDefender()
 	InitAttacekedPos();
 	InitPlayerMap();
 	InitShipPos();
+	InitShipHP();
+}
+
+void Player::InitShipHP()
+{
+	for (std::vector<Ship*>::size_type i = 0; i < m_ShipVector.size(); ++i)
+	{
+		m_ShipVector[i]->InitHP();
+	}
 }

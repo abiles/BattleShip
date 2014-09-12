@@ -38,6 +38,7 @@ public:
 	void		 InitPlayerMap();
 	void		 InitShipPos();
 	void		 InitDefender();
+	void		 InitShipHP();
 
 	//ÇÁ¸°Æ®
 	void		 PrintShips();
