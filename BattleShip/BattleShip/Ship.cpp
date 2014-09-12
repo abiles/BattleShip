@@ -19,7 +19,7 @@ void Ship::SetSize(int _size)
 
 	if (!(_size < MAX_SHIP_SIZE && _size > SHIP_SIZE_ZERO))
 	{
-		printf_s("Wrong size input \n");
+		//printf_s("Wrong size input \n");
 		m_Size = SHIP_SIZE_ZERO;
 		return;
 	}
@@ -33,7 +33,7 @@ void Ship::SetHP(int _HP)
 
 	if (!(_HP < MAX_HP && _HP > HP_ZERO))
 	{
-		printf_s("Wrong HP input \n");
+		//printf_s("Wrong HP input \n");
 		m_HP = HP_ZERO;
 		return;
 	}
@@ -53,7 +53,7 @@ void Ship::SetShipType(ShipType inputShipType)
 
 	if (!(inputShipType < SHIP_TYPE_END && inputShipType > SHIP_TYPE_NONE))
 	{
-		printf_s("Wrong ShipType input \n");
+		//printf_s("Wrong ShipType input \n");
 		m_ShipType = SHIP_TYPE_NONE;
 		return;
 	}
@@ -207,11 +207,11 @@ HitResult Ship::CheckAttack(ShipPos attackedPos)
 
 	for (int i = 0; i < this->GetSize(); ++i)
 	{
-		if (this->GetPos(i).x == attackedPos.x && this->GetPos(i).y == attackedPos.y)
+		if (GetPos(i).x == attackedPos.x && GetPos(i).y == attackedPos.y)
 		{
-			this->HitResultApply();
+			HitResultApply();
 
-			if (this->GetHP() == 0)
+			if (GetHP() == 0)
 			{
 				return DESTROY;
 			}
@@ -233,11 +233,11 @@ void Ship::PrintShipPos()
 
 	for (int i = 0; i < m_Size; ++i)
 	{
-		if (m_Pos[i].x == 0)
+		if (m_Pos[i].x == -1)
 		{
 			break;
 		}
-		printf_s("%c%c\t", m_Pos[i].x, m_Pos[i].y);
+		printf_s("%d%d\t", m_Pos[i].x, m_Pos[i].y);
 	}
 
 	printf_s("\n");

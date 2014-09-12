@@ -62,6 +62,10 @@ void Player::RandomAssignShips()
 			ValidPosLauchToShip(StartPos, direction, shipIdx);
 			ValidPosSetToMap(StartPos, direction, shipIdx);
 			shipIdx++;
+			if ((unsigned int)shipIdx >= m_ShipVector.size())
+			{
+				break;
+			}
 		}
 
 	}
@@ -303,19 +307,31 @@ void Player::ValidPosSetToMap(ShipPos inputShipPos, ShipDirection inputDir, int 
 
 ShipPos Player::SelectPosToAttack()
 {
-	srand((unsigned int)time(NULL));
+	//srand((unsigned int)time(NULL));
 	
-	while (true)
+	/*while (true)
 	{
 		m_AttackPos.x = rand() % MAX_HORIZONTAL;
 		m_AttackPos.y = rand() % MAX_VERTICAL;
 
-		if (m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos) == SHIP_LAUNCH ||
-			m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos) == MAP_NONE)
+		if (m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos) == MAP_NONE)
 		{
 			break;
 		}
+	}*/
+	if (m_AttackPos.x == -1)
+	{
+		m_AttackPos.x = 0;
 	}
+
+	++m_AttackPos.y;
+	if (m_AttackPos.y >= MAX_VERTICAL)
+	{
+		++m_AttackPos.x;
+		m_AttackPos.y = 0;
+	}
+	
+
 	
 	return m_AttackPos;
 }
@@ -351,16 +367,16 @@ void Player::SetAttackedResult()
 	//전체 배를 돌면서 어디에 맞았는지 확인 하는 거야? 
 	//왜?
 
-	if (m_PlayerMap->GetEachPosDataInMap(m_PosAttackedFromOtherPlayer) == SHIP_ATTACEKED)
+	/*if (m_PlayerMap->GetEachPosDataInMap(m_PosAttackedFromOtherPlayer) == SHIP_ATTACEKED)
 	{
 		m_AttackedResult = HIT;
 	}
 	else
 	{
 		m_AttackedResult = MISS;
-	}
+	}*/
 
-	/*
+	
 	for (std::vector<Ship*>::size_type i = 0; i < m_ShipVector.size(); ++i)
 	{
 		m_AttackedResult = m_ShipVector[i]->CheckAttack(m_PosAttackedFromOtherPlayer);
@@ -373,7 +389,7 @@ void Player::SetAttackedResult()
 	if (m_AttackedResult == HIT_NONE)
 	{
 		m_AttackedResult = MISS;
-	}*/
+	}
 }
 
 
@@ -413,7 +429,8 @@ void Player::InitAttackedResult()
 
 void Player::InitAttacekedPos()
 {
-	m_PosAttackedFromOtherPlayer = { -1 };
+	m_PosAttackedFromOtherPlayer.x = -1;
+	m_PosAttackedFromOtherPlayer.y = -1;
 
 }
 
@@ -424,7 +441,8 @@ void Player::MakrAttackResultToOtherPlayerMap(HitResult attackedResult)
 
 void Player::InitAttackPos()
 {
-	m_AttackPos = { -1 };
+	m_AttackPos.x = -1;
+	m_AttackPos.y = -1;
 }
 
 void Player::InitOtherPlayerMap()

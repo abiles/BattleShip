@@ -129,13 +129,13 @@ void Map::MarkAttackedPos(ShipPos AttackedPos)
 	if (!(AttackedPos.x < MAX_HORIZONTAL &&
 		  AttackedPos.x >= HORIZONTAL_ZERO))
 	{
-		printf_s("Attacking is not available to current pos\n");
+		//printf_s("Attacking is not available to current pos\n");
 		return;
 	}
 	if (!(AttackedPos.y < MAX_VERTICAL &&
 		  AttackedPos.y >= VERTICAL_ZERO))
 	{
-		printf_s("Attacking is not available to current pos\n");
+		//printf_s("Attacking is not available to current pos\n");
 		return;
 	}
 
@@ -149,7 +149,7 @@ void Map::MarkAttackedPos(ShipPos AttackedPos)
 	}
 	else
 	{
-		printf_s("Attacking is not available to current pos\n");
+		//printf_s("Attacking is not available to current pos\n");
 	}
 	
 }

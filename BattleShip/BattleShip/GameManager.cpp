@@ -64,13 +64,17 @@ void GameManager::InitAttackResultFromPlayer()
 void GameManager::PlayingGame()
 {
 	int totalTurnNum =0;
+	int EachGameTurn = 0;
 	for (int i = 0; i < GAMENUM; ++i)
 	{
+		m_Attacker->InitAttacker();
+		m_Defender->InitDefender();
 		m_Defender->RandomAssignShips();
 
 		while (!IsGameEnd())
 		{
 			m_AttackPosFromPlayer = m_Attacker->SelectPosToAttack();
+			system("cls");
 			m_Defender->SetAttackedPos(m_AttackPosFromPlayer);
 			m_Defender->MarkAttackFromOtherPlayer();
 			m_Defender->SetAttackedResult();
@@ -80,9 +84,11 @@ void GameManager::PlayingGame()
 			HitResultPrint();
 			m_Defender->PrintMap();
 			++totalTurnNum;
+			++EachGameTurn;
 		}
-		m_Attacker->InitAttacker();
-		m_Defender->InitDefender();
+		printf_s("each game average turn %d\n", EachGameTurn);
+		EachGameTurn = 0;
+		getchar();
 	}
 
 	printf_s("average %d game Turn = %f", GAMENUM, double(totalTurnNum / 10));
