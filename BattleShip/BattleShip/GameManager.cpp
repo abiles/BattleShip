@@ -60,3 +60,70 @@ void GameManager::InitAttackResultFromPlayer()
 {
 	m_AttackedResultFromDef = HIT_NONE;
 }
+
+void GameManager::PlayingGame()
+{
+	int totalTurnNum =0;
+	for (int i = 0; i < GAMENUM; ++i)
+	{
+		m_Defender->RandomAssignShips();
+
+		while (!IsGameEnd())
+		{
+			m_AttackPosFromPlayer = m_Attacker->SelectPosToAttack();
+			m_Defender->SetAttackedPos(m_AttackPosFromPlayer);
+			m_Defender->MarkAttackFromOtherPlayer();
+			m_Defender->SetAttackedResult();
+			m_AttackedResultFromDef = m_Defender->GetAttackedResult();
+			m_Attacker->MakrAttackResultToOtherPlayerMap(m_AttackedResultFromDef);
+			m_Defender->PrintShips();
+			HitResultPrint();
+			m_Defender->PrintMap();
+			++totalTurnNum;
+		}
+		m_Attacker->InitAttacker();
+		m_Defender->InitDefender();
+	}
+
+	printf_s("average %d game Turn = %f", GAMENUM, double(totalTurnNum / 10));
+}
+
+bool GameManager::IsGameEnd()
+{
+	return m_Defender->IsAllShipDestroyed();
+}
+
+void GameManager::HitResultPrint()
+{
+	printf_s("\n");
+
+	switch (m_AttackedResultFromDef)
+	{
+	case HIT_NONE:
+		printf_s("Noting\n");
+		break;
+	case HIT:
+		printf_s("HIT!!\n");
+		break;
+	case MISS:
+		printf_s("MISS!!\n");
+		break;
+	case DESTROY:
+		printf_s("DESTROY!!\n");
+		break;
+	case AIRCRAFT_DESTROY:
+		printf_s("AIRCRAFT_DESTROY\n");
+		break;
+	case BATTLESHIP_DESTROY:
+		printf_s("BATTLESHIP_DESTROY\n");
+		break;
+	case CRUISER_DESTROY:
+		printf_s("CRUISER_DESTROY\n");
+		break;
+	case DESTROYER_DESTROY:
+		printf_s("DESTROYER_DESTROY\n");
+		break;
+	default:
+		break;
+	}
+}

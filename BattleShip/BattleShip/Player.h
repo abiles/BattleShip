@@ -22,6 +22,10 @@ public:
 
 	//공격
 	ShipPos		 SelectPosToAttack();
+	void		 MakrAttackResultToOtherPlayerMap(HitResult attackedResult);
+	void		 InitAttackPos();
+	void		 InitOtherPlayerMap();
+	void		 InitAttacker();
 
 	//방어
 	void		 SetAttackedPos(ShipPos attackedPos);
@@ -31,6 +35,9 @@ public:
 	bool		 IsAllShipDestroyed();
 	void		 InitAttackedResult();
 	void		 InitAttacekedPos();
+	void		 InitPlayerMap();
+	void		 InitShipPos();
+	void		 InitDefender();
 
 	//프린트
 	void		 PrintShips();
@@ -39,6 +46,7 @@ public:
 private:
 	Map*					m_PlayerMap;
 	Map*					m_OtherPlayerMap;
+	ShipPos					m_AttackPos;
 	ShipPos					m_PosAttackedFromOtherPlayer;
 	std::vector<Ship*>		m_ShipVector;
 	HitResult				m_AttackedResult;

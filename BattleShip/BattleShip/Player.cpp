@@ -57,7 +57,6 @@ void Player::RandomAssignShips()
 		StartPos.y = rand() % MAX_VERTICAL;
 		direction  = (ShipDirection)(rand() % MAX_DIRECTION);
 
-
 		if (IsValidPos(StartPos, direction, shipIdx))
 		{
 			ValidPosLauchToShip(StartPos, direction, shipIdx);
@@ -66,8 +65,6 @@ void Player::RandomAssignShips()
 		}
 
 	}
-
-
 	return;
 }
 
@@ -307,21 +304,20 @@ void Player::ValidPosSetToMap(ShipPos inputShipPos, ShipDirection inputDir, int 
 ShipPos Player::SelectPosToAttack()
 {
 	srand((unsigned int)time(NULL));
-	ShipPos attackPos = { -1, };
 	
 	while (true)
 	{
-		attackPos.x = rand() % MAX_HORIZONTAL;
-		attackPos.y = rand() % MAX_VERTICAL;
+		m_AttackPos.x = rand() % MAX_HORIZONTAL;
+		m_AttackPos.y = rand() % MAX_VERTICAL;
 
-		if (m_OtherPlayerMap->GetEachPosDataInMap(attackPos) == SHIP_LAUNCH ||
-			m_OtherPlayerMap->GetEachPosDataInMap(attackPos) == MAP_NONE)
+		if (m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos) == SHIP_LAUNCH ||
+			m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos) == MAP_NONE)
 		{
 			break;
 		}
 	}
 	
-	return attackPos;
+	return m_AttackPos;
 }
 
 void Player::SetAttackedPos(ShipPos attackedPos)
@@ -384,16 +380,11 @@ void Player::SetAttackedResult()
 
 bool Player::IsAllShipDestroyed()
 {
-	
-
-	for (char i = 0; i < MAX_HORIZONTAL; ++i)
+	for (std::vector<Ship*>::size_type i = 0; i < m_ShipVector.size(); ++i)
 	{
-		for (char j = 0; j < MAX_VERTICAL; ++j)
+		if (m_ShipVector[i]->GetHP() != 0)
 		{
-			if (m_PlayerMap->GetEachPosDataInMap(i, j) == SHIP_LAUNCH)
-			{
-				return false;
-			}
+			return false;
 		}
 	}
 
@@ -422,6 +413,48 @@ void Player::InitAttackedResult()
 
 void Player::InitAttacekedPos()
 {
-	m_PosAttackedFromOtherPlayer.x = -1;
-	m_PosAttackedFromOtherPlayer.y = -1;
+	m_PosAttackedFromOtherPlayer = { -1 };
+
+}
+
+void Player::MakrAttackResultToOtherPlayerMap(HitResult attackedResult)
+{
+
+}
+
+void Player::InitAttackPos()
+{
+	m_AttackPos = { -1 };
+}
+
+void Player::InitOtherPlayerMap()
+{
+	m_OtherPlayerMap->InitMap();
+}
+
+void Player::InitPlayerMap()
+{
+	m_PlayerMap->InitMap();
+}
+
+void Player::InitShipPos()
+{
+	for (std::vector<Ship*>::size_type i = 0; i < m_ShipVector.size(); ++i)
+	{
+		m_ShipVector[i]->InitPos();
+	}
+}
+
+void Player::InitAttacker()
+{
+	InitAttackPos();
+	InitOtherPlayerMap();
+}
+
+void Player::InitDefender()
+{
+	InitAttackedResult();
+	InitAttacekedPos();
+	InitPlayerMap();
+	InitShipPos();
 }

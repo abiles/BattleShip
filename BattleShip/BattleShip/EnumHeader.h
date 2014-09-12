@@ -85,6 +85,10 @@ enum ShipType
 	SHIP_TYPE_END,
 };
 
+enum GameNum
+{
+	GAMENUM = 10,
+};
 
 
 

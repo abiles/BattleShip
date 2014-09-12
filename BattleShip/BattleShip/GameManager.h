@@ -16,8 +16,9 @@ public:
 	void		SetAttackPosFromPlayer(ShipPos inputPos);
 	void		InitAttackPosFromPlayer();
 	void		InitAttackResultFromPlayer();
-	
-
+	void		PlayingGame();
+	bool		IsGameEnd();
+	void		HitResultPrint();
 private:
 
 	Player*		m_Attacker;
