@@ -27,6 +27,7 @@ public:
 	bool			  IsPosFull();
 	OverLapCheck 	  IsOverlap(ShipPos inputPos);
 	void			  InitPos();
+	virtual void	  InitHP() = 0;
 
 	ShipPos			  GetDirPos(ShipDirection inputDir);
 	void		      MakeDir();

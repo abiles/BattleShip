@@ -4,11 +4,13 @@
 
 Ship::Ship()
 {
+	MakeDir();
 }
 
 
 Ship::~Ship()
 {
+
 }
 
 void Ship::SetSize(int _size)
@@ -213,8 +215,6 @@ HitResult Ship::CheckAttack(ShipPos attackedPos)
 			{
 				return DESTROY;
 			}
-
-
 			return HIT;
 		}
 	}
@@ -242,5 +242,7 @@ void Ship::PrintShipPos()
 
 	printf_s("\n");
 }
+
+
 
 

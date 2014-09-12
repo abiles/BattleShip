@@ -8,5 +8,6 @@ public:
 	virtual ~Cruiser();
 
 	HitResult CheckAttack(ShipPos attackPos);
+	void	  InitHP(){ m_HP = CRUISER_HP; }
 };
 

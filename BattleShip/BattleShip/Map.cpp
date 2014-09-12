@@ -4,11 +4,13 @@
 
 Map::Map()
 {
+	MakeMap();
 }
 
 
 Map::~Map()
 {
+	DeleteMap();
 }
 
 
@@ -21,6 +23,16 @@ void Map::MakeMap()
 		m_Map[i] = new int[MAX_VERTICAL];
 	}
 	return;
+}
+
+void Map::DeleteMap()
+{
+	for (int i = 0; i < MAX_HORIZONTAL; ++i)
+	{
+		delete[] m_Map[i];
+	}
+
+	delete[] m_Map;
 }
 
 void Map::InitMap()

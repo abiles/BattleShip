@@ -7,7 +7,11 @@ public:
 	Map();
 	virtual ~Map();
 
+private:
 	void MakeMap();
+	void DeleteMap();
+
+public:
 	void InitMap();
 	void PrintMapData();
 	int  GetEachPosDataInMap(ShipPos inputShipPos);

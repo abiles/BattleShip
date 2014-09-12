@@ -8,5 +8,6 @@ public:
 	virtual ~BattleShip();
 
 	HitResult CheckAttack(ShipPos attackPos);
+	void	  InitHP(){ m_HP = BATTLESHIP_HP; }
 };
 

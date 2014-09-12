@@ -4,6 +4,10 @@
 
 Cruiser::Cruiser()
 {
+	m_ShipType = CRUISER;
+	m_ShipName = "Cruiser";
+	m_Size = CRUISER_SIZE;
+	m_HP = CRUISER_HP;
 }
 
 

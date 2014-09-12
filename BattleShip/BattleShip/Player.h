@@ -12,16 +12,16 @@ public:
 
 	
 	//배치
-	void RandomAssignShips();
-	bool IsShipAssigned(int shipIdx);
-	bool IsValidPos(ShipPos inputShipPos, ShipDirection inputDir, int shipIdx);
-	bool IsLastPointFine(ShipPos inputShipPos, ShipDirection inputDir, int shipIdx);
-	bool IsOtherShipOverlap(ShipPos inputShipPos, ShipDirection inputDir, int shipIdx);
-	void ValidPosLauchToShip(ShipPos inputShipPos, ShipDirection inputDir, int shipIdx);
-	void ValidPosSetToMap(ShipPos inputShipPos, ShipDirection inputDir, int shipIdx);
+	void		 RandomAssignShips();
+	bool		 IsShipAssigned(int shipIdx);
+	bool		 IsValidPos(ShipPos inputShipPos, ShipDirection inputDir, int shipIdx);
+	bool		 IsLastPointFine(ShipPos inputShipPos, ShipDirection inputDir, int shipIdx);
+	bool		 IsOtherShipOverlap(ShipPos inputShipPos, ShipDirection inputDir, int shipIdx);
+	void		 ValidPosLauchToShip(ShipPos inputShipPos, ShipDirection inputDir, int shipIdx);
+	void		 ValidPosSetToMap(ShipPos inputShipPos, ShipDirection inputDir, int shipIdx);
 
 	//공격
-	ShipPos SelectPosToAttack();
+	ShipPos		 SelectPosToAttack();
 
 	//방어
 	void		 SetAttackedPos(ShipPos attackedPos);
@@ -29,10 +29,12 @@ public:
 	HitResult	 GetAttackedResult() const { return m_AttackedResult; }
 	void	     SetAttackedResult();
 	bool		 IsAllShipDestroyed();
+	void		 InitAttackedResult();
+	void		 InitAttacekedPos();
 
 	//프린트
-	void PrintShips();
-	void PrintMap();
+	void		 PrintShips();
+	void		 PrintMap();
 
 private:
 	Map*					m_PlayerMap;

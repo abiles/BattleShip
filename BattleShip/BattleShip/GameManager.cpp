@@ -11,11 +11,15 @@
 
 GameManager::GameManager()
 {
+	m_Attacker = new Player();
+	m_Defender = new Player();
 }
 
 
 GameManager::~GameManager()
 {
+	delete m_Attacker;
+	delete m_Defender;
 }
 
 void GameManager::SetAttackedResultFromDef(HitResult HitResultFromDef)
@@ -44,4 +48,15 @@ void GameManager::SetAttackPosFromPlayer(ShipPos inputPos)
 	}
 
 	m_AttackPosFromPlayer = inputPos;
+}
+
+void GameManager::InitAttackPosFromPlayer()
+{
+	m_AttackPosFromPlayer.x = -1;
+	m_AttackPosFromPlayer.y = -1;
+}
+
+void GameManager::InitAttackResultFromPlayer()
+{
+	m_AttackedResultFromDef = HIT_NONE;
 }

@@ -8,5 +8,6 @@ public:
 	virtual ~Destroyer();
 
 	HitResult CheckAttack(ShipPos attackPos);
+	void	  InitHP(){ m_HP = DESTROYER_HP; }
 };
 

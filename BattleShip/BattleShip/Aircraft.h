@@ -8,5 +8,6 @@ public:
 	virtual ~Aircraft();
 
 	HitResult CheckAttack(ShipPos attackPos);
-};
+	void	  InitHP(){ m_HP = AIRCRAFT_HP; }
 
+};

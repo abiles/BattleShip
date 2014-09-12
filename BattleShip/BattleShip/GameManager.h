@@ -14,6 +14,9 @@ public:
 	void		SetAttackedResultFromDef(HitResult HitResultFromDef);
 	ShipPos		GetAttackPosFromPlayer() const { return m_AttackPosFromPlayer; }
 	void		SetAttackPosFromPlayer(ShipPos inputPos);
+	void		InitAttackPosFromPlayer();
+	void		InitAttackResultFromPlayer();
+	
 
 private:
 

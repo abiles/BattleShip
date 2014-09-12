@@ -10,11 +10,36 @@
 
 Player::Player()
 {
+	m_PlayerMap = new Map();
+	m_OtherPlayerMap = new Map();
+	m_ShipVector.reserve(SHIP_TYPE_END - 1);
+	m_ShipVector.push_back(new Aircraft());
+	m_ShipVector.push_back(new BattleShip());
+	m_ShipVector.push_back(new Cruiser());
+	m_ShipVector.push_back(new Destroyer());
 }
 
 
 Player::~Player()
 {
+	delete m_PlayerMap;
+	delete m_OtherPlayerMap;
+
+	for (auto iterShip = m_ShipVector.begin(); iterShip != m_ShipVector.end();)
+	{
+		if ((*iterShip))
+		{
+			delete (*iterShip);
+			*iterShip = nullptr;
+			iterShip = m_ShipVector.erase(iterShip);
+		}
+		else
+		{
+			iterShip = m_ShipVector.erase(iterShip);
+		}
+	}
+
+	m_ShipVector.clear();
 }
 
 void Player::RandomAssignShips()
@@ -110,8 +135,6 @@ bool Player::IsValidPos(ShipPos inputShipPos, ShipDirection inputDir, int shipId
 		return false;
 	}
 
-
-	//std::vector<Ship>::iterator findIter;
 	//1단계 끝지점이 지도를 넘지 않는지 확인
 
 	if (!IsLastPointFine(inputShipPos, inputDir, shipIdx))
@@ -152,11 +175,6 @@ bool Player::IsLastPointFine(ShipPos inputShipPos, ShipDirection inputDir, int s
 	{
 		return false;
 	}
-
-	m_ShipVector[shipIdx]->MakeDir();
-	//이거 여기서 해야되나? init이라고해서 만들어야 되나? 어짜피 한번만 만들면 되는데 
-
-
 
 	for (int i = 0; i < m_ShipVector[shipIdx]->GetSize(); ++i)
 	{
@@ -288,9 +306,22 @@ void Player::ValidPosSetToMap(ShipPos inputShipPos, ShipDirection inputDir, int 
 
 ShipPos Player::SelectPosToAttack()
 {
-	ShipPos tmpPos = { 0, };
+	srand((unsigned int)time(NULL));
+	ShipPos attackPos = { -1, };
 	
-	return tmpPos;
+	while (true)
+	{
+		attackPos.x = rand() % MAX_HORIZONTAL;
+		attackPos.y = rand() % MAX_VERTICAL;
+
+		if (m_OtherPlayerMap->GetEachPosDataInMap(attackPos) == SHIP_LAUNCH ||
+			m_OtherPlayerMap->GetEachPosDataInMap(attackPos) == MAP_NONE)
+		{
+			break;
+		}
+	}
+	
+	return attackPos;
 }
 
 void Player::SetAttackedPos(ShipPos attackedPos)
@@ -382,4 +413,15 @@ void Player::PrintShips()
 void Player::PrintMap()
 {
 	m_PlayerMap->PrintMapData();
+}
+
+void Player::InitAttackedResult()
+{
+	m_AttackedResult = HIT_NONE;
+}
+
+void Player::InitAttacekedPos()
+{
+	m_PosAttackedFromOtherPlayer.x = -1;
+	m_PosAttackedFromOtherPlayer.y = -1;
 }

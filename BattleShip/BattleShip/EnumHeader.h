@@ -83,7 +83,6 @@ enum ShipType
 	CRUISER,
 	DESTROYER,
 	SHIP_TYPE_END,
-
 };
 
 

@@ -4,6 +4,11 @@
 
 Aircraft::Aircraft()
 {
+	m_ShipType = AIRCRAFT;
+	m_ShipName = "Aircraft";
+	m_Size = AIRCRAFT_SIZE;
+	m_HP = AIRCRAFT_HP;
+
 }
 
 
