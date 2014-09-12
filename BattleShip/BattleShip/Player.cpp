@@ -12,10 +12,11 @@ Player::Player()
 {
 	m_PlayerMap = new Map();
 	m_OtherPlayerMap = new Map();
-	m_ShipVector.reserve(SHIP_TYPE_END - 1);
+	m_ShipVector.reserve(SHIP_TYPE_END);
 	m_ShipVector.push_back(new Aircraft());
 	m_ShipVector.push_back(new BattleShip());
 	m_ShipVector.push_back(new Cruiser());
+	m_ShipVector.push_back(new Destroyer());
 	m_ShipVector.push_back(new Destroyer());
 }
 
@@ -307,18 +308,7 @@ void Player::ValidPosSetToMap(ShipPos inputShipPos, ShipDirection inputDir, int 
 
 ShipPos Player::SelectPosToAttack()
 {
-	//srand((unsigned int)time(NULL));
 	
-	/*while (true)
-	{
-		m_AttackPos.x = rand() % MAX_HORIZONTAL;
-		m_AttackPos.y = rand() % MAX_VERTICAL;
-
-		if (m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos) == MAP_NONE)
-		{
-			break;
-		}
-	}*/
 	if (m_AttackPos.x == -1)
 	{
 		m_AttackPos.x = 0;

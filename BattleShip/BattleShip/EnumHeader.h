@@ -87,7 +87,7 @@ enum ShipType
 
 enum GameNum
 {
-	GAMENUM = 10,
+	GAMENUM = 2,
 };
 
 

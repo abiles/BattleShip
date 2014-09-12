@@ -87,12 +87,12 @@ void GameManager::PlayingGame()
 			++totalTurnNum;
 			++EachGameTurn;
 		}
-		printf_s("each game average turn %d\n", EachGameTurn);
+		printf_s("this game turn %d\n", EachGameTurn);
 		EachGameTurn = 0;
 	
 	}
 
-	printf_s("average %d game Turn = %f", GAMENUM, double(totalTurnNum / 10));
+	printf_s("average %d game Turn = %f", GAMENUM, double(totalTurnNum / GAMENUM));
 }
 
 bool GameManager::IsGameEnd()
