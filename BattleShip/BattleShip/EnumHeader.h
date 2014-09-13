@@ -1,5 +1,19 @@
 #pragma once
 
+
+
+enum GameMode
+{
+	HUNTMODE,
+	TARGETMODE,
+};
+
+enum GameNum
+{
+	GAMENUM = 2,
+};
+
+
 enum HitResult
 {
 	HIT_NONE,
@@ -19,6 +33,7 @@ enum MapState
 	SHIP_LAUNCH,
 	SHIP_ATTACEKED,
 	MISSED_ATTACK,
+	SHIP_DESTROYED,
 };
 
 enum MapSize
@@ -85,10 +100,7 @@ enum ShipType
 	SHIP_TYPE_END,
 };
 
-enum GameNum
-{
-	GAMENUM = 2,
-};
+
 
 
 

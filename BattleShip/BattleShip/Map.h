@@ -12,18 +12,17 @@ private:
 	void DeleteMap();
 
 public:
-	void InitMap();
-	void PrintMapData();
-	int  GetEachPosDataInMap(ShipPos inputShipPos);
-	int  GetEachPosDataInMap(char x, char y);
+	void	  InitMap();
+	void	  PrintMapData();
+	MapState  GetEachPosDataInMap(ShipPos inputShipPos);
+	MapState  GetEachPosDataInMap(char x, char y);
 
 	void SetEachPosDataInMap(ShipPos shipPos);
 	//void SetEachPosDataInMap(char x, char y);
 
-	void MarkAttackedPos(ShipPos AttackedPos);
-	//void MarkAttackedPos(char x, char y);
 
+	void MarkAttackResult(ShipPos attackedPos, MapState inputMapState);
 private:
-	int** m_Map;
+	MapState** m_Map;
 };
 

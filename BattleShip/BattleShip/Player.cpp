@@ -18,13 +18,24 @@ Player::Player()
 	m_ShipVector.push_back(new Cruiser());
 	m_ShipVector.push_back(new Destroyer());
 	m_ShipVector.push_back(new Destroyer());
+	m_GameMode = HUNTMODE;
+	m_HitResultArr = new HitResult[MAX_HORIZONTAL*MAX_VERTICAL];
+	m_AttackPosArr = new ShipPos[MAX_HORIZONTAL*MAX_VERTICAL];
+	m_AttackedPosFromOtherPlayerArr = new ShipPos[MAX_HORIZONTAL*MAX_VERTICAL];
+	m_OtherRemainShipCheck = new int[SHIP_TYPE_END];
+	m_AttackTurn = -1;
+
 }
 
 
 Player::~Player()
 {
-	delete m_PlayerMap;
-	delete m_OtherPlayerMap;
+	delete   m_PlayerMap;
+	delete   m_OtherPlayerMap;
+	delete[] m_HitResultArr;
+	delete[] m_AttackPosArr;
+	delete[] m_AttackedPosFromOtherPlayerArr;
+	delete[] m_OtherRemainShipCheck;
 
 	for (auto iterShip = m_ShipVector.begin(); iterShip != m_ShipVector.end();)
 	{
@@ -308,7 +319,30 @@ void Player::ValidPosSetToMap(ShipPos inputShipPos, ShipDirection inputDir, int 
 
 ShipPos Player::SelectPosToAttack()
 {
+	srand((unsigned int)time(NULL));
 	
+	++m_AttackTurn;
+
+	//switch (m_GameMode)
+	//{
+	//case HUNTMODE:
+	////·£´ýÀ¸·Î ½î±â
+	//do
+	//{
+	//	m_AttackPos.x = rand() % MAX_HORIZONTAL;
+	//	m_AttackPos.y = rand() % MAX_VERTICAL;
+
+	//	
+	//} while (!SelectFineRandAttackPos());
+	//break;
+	//case TARGETMODE:
+
+	//break;
+	//default:
+	//break;
+	//}
+
+
 	if (m_AttackPos.x == -1)
 	{
 		m_AttackPos.x = 0;
@@ -324,6 +358,18 @@ ShipPos Player::SelectPosToAttack()
 
 	
 	return m_AttackPos;
+}
+
+bool Player::SelectFineRandAttackPos()
+{
+	if (MAP_NONE == m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 void Player::SetAttackedPos(ShipPos attackedPos)
@@ -346,11 +392,8 @@ void Player::SetAttackedPos(ShipPos attackedPos)
 	
 }
 
-void Player::MarkAttackFromOtherPlayer()
-{
-	//ÀÏ´Ü ¸Ê¿¡ ±×¸°´Ù. 
-	m_PlayerMap->MarkAttackedPos(m_PosAttackedFromOtherPlayer);
-}
+
+
 
 void Player::SetAttackedResult()
 {
@@ -382,7 +425,94 @@ void Player::SetAttackedResult()
 	}
 }
 
+void Player::SetAttackedResultFromGM(HitResult inputHitResult)
+{
+	_ASSERT(inputHitResult >= HIT_NONE && inputHitResult < HITREUSLT_MAX);
+	if (!(inputHitResult >= HIT_NONE && inputHitResult < HITREUSLT_MAX))
+	{
+		m_AttackedResultFromGM = HIT_NONE;
+	}
 
+	m_AttackedResultFromGM = inputHitResult;
+}
+
+void Player::MakrAttackResultToOtherPlayerMap()
+{
+	ShipPos movePos = { 0, };
+	ShipPos tmpAttackPos = m_AttackPos;
+
+	switch (m_AttackedResultFromGM)
+	{
+	case HIT_NONE:
+	break;
+	case HIT:
+	m_OtherPlayerMap->MarkAttackResult(m_AttackPos, SHIP_ATTACEKED);
+	break;
+	case MISS:
+	m_OtherPlayerMap->MarkAttackResult(m_AttackPos, MISSED_ATTACK);
+	break;
+	case DESTROY:
+	break;
+	case AIRCRAFT_DESTROY:
+
+	movePos.x = m_AttackPosArr[m_AttackTurn - 1].x - tmpAttackPos.x;
+	movePos.y = m_AttackPosArr[m_AttackTurn - 1].y - tmpAttackPos.y;
+	
+	for (int i = 0; i < AIRCRAFT_SIZE; ++i)
+	{
+		m_OtherPlayerMap->MarkAttackResult(m_AttackPos, SHIP_DESTROYED);
+		tmpAttackPos.x += movePos.x;
+		tmpAttackPos.y += movePos.y;
+
+	}
+	break;
+
+	case BATTLESHIP_DESTROY:
+	movePos.x = m_AttackPosArr[m_AttackTurn - 1].x - tmpAttackPos.x;
+	movePos.y = m_AttackPosArr[m_AttackTurn - 1].y - tmpAttackPos.y;
+
+	for (int i = 0; i < BATTLESHIP_SZIE; ++i)
+	{
+		m_OtherPlayerMap->MarkAttackResult(m_AttackPos, SHIP_DESTROYED);
+		tmpAttackPos.x += movePos.x;
+		tmpAttackPos.y += movePos.y;
+
+	}
+	break;
+
+	case CRUISER_DESTROY:
+	movePos.x = m_AttackPosArr[m_AttackTurn - 1].x - tmpAttackPos.x;
+	movePos.y = m_AttackPosArr[m_AttackTurn - 1].y - tmpAttackPos.y;
+
+	for (int i = 0; i < CRUISER_SIZE; ++i)
+	{
+		m_OtherPlayerMap->MarkAttackResult(m_AttackPos, SHIP_DESTROYED);
+		tmpAttackPos.x += movePos.x;
+		tmpAttackPos.y += movePos.y;
+	}
+	break;
+
+	case DESTROYER_DESTROY:
+	movePos.x = m_AttackPosArr[m_AttackTurn - 1].x - tmpAttackPos.x;
+	movePos.y = m_AttackPosArr[m_AttackTurn - 1].y - tmpAttackPos.y;
+
+	for (int i = 0; i < DESTROYER_SIZE; ++i)
+	{
+		m_OtherPlayerMap->MarkAttackResult(m_AttackPos, SHIP_DESTROYED);
+		tmpAttackPos.x += movePos.x;
+		tmpAttackPos.y += movePos.y;
+
+	}
+	break;
+	case HITREUSLT_MAX:
+	break;
+	default:
+	break;
+	}
+
+
+
+}
 
 bool Player::IsAllShipDestroyed()
 {
@@ -409,6 +539,7 @@ void Player::PrintShips()
 
 void Player::PrintMap()
 {
+	printf_s("Defender's Map\n");
 	m_PlayerMap->PrintMapData();
 }
 
@@ -424,10 +555,7 @@ void Player::InitAttacekedPos()
 
 }
 
-void Player::MakrAttackResultToOtherPlayerMap(HitResult attackedResult)
-{
 
-}
 
 void Player::InitAttackPos()
 {
@@ -457,6 +585,10 @@ void Player::InitAttacker()
 {
 	InitAttackPos();
 	InitOtherPlayerMap();
+	InitRemainShip();
+	InitHitResultArr();
+	InitAttakPosArr();
+	InitAttackTurn();
 }
 
 void Player::InitDefender()
@@ -466,6 +598,7 @@ void Player::InitDefender()
 	InitPlayerMap();
 	InitShipPos();
 	InitShipHP();
+	InitAttackedPosArr();
 }
 
 void Player::InitShipHP()
@@ -475,3 +608,178 @@ void Player::InitShipHP()
 		m_ShipVector[i]->InitHP();
 	}
 }
+
+void Player::MakrAttackResultToPlayerMap(ShipPos attackedPos)
+{
+	_ASSERT(attackedPos.x < MAX_HORIZONTAL && attackedPos.x >= HORIZONTAL_ZERO);
+	_ASSERT(attackedPos.y < MAX_VERTICAL && attackedPos.y >= VERTICAL_ZERO);
+	if (!(attackedPos.x < MAX_HORIZONTAL &&
+		attackedPos.x >= HORIZONTAL_ZERO))
+	{
+		return;
+	}
+	if (!(attackedPos.y < MAX_VERTICAL &&
+		attackedPos.y >= VERTICAL_ZERO))
+	{
+		return;
+	}
+
+	ShipPos movePos = { 0, };
+	ShipPos tmpAttackPos = attackedPos;
+
+	switch (m_AttackedResultFromGM)
+	{
+	case HIT_NONE:
+	break;
+	case HIT:
+	m_PlayerMap->MarkAttackResult(attackedPos, SHIP_ATTACEKED);
+	break;
+	case MISS:
+	m_PlayerMap->MarkAttackResult(attackedPos, MISSED_ATTACK);
+	break;
+	case DESTROY:
+	break;
+	case AIRCRAFT_DESTROY:
+	
+
+	movePos.x = m_AttackPosArr[m_AttackTurn - 1].x - tmpAttackPos.x;
+	movePos.y = m_AttackPosArr[m_AttackTurn - 1].y - tmpAttackPos.y;
+
+	for (int i = 0; i < AIRCRAFT_SIZE; ++i)
+	{
+		m_PlayerMap->MarkAttackResult(attackedPos, SHIP_DESTROYED);
+		tmpAttackPos.x += movePos.x;
+		tmpAttackPos.y += movePos.y;
+
+	}
+	break;
+
+	case BATTLESHIP_DESTROY:
+	
+	movePos.x = m_AttackPosArr[m_AttackTurn - 1].x - tmpAttackPos.x;
+	movePos.y = m_AttackPosArr[m_AttackTurn - 1].y - tmpAttackPos.y;
+
+	for (int i = 0; i < BATTLESHIP_SZIE; ++i)
+	{
+		m_PlayerMap->MarkAttackResult(attackedPos, SHIP_DESTROYED);
+		tmpAttackPos.x += movePos.x;
+		tmpAttackPos.y += movePos.y;
+
+	}
+	break;
+
+	case CRUISER_DESTROY:
+	
+	movePos.x = m_AttackPosArr[m_AttackTurn - 1].x - tmpAttackPos.x;
+	movePos.y = m_AttackPosArr[m_AttackTurn - 1].y - tmpAttackPos.y;
+
+	for (int i = 0; i < CRUISER_SIZE; ++i)
+	{
+		m_PlayerMap->MarkAttackResult(attackedPos, SHIP_DESTROYED);
+		tmpAttackPos.x += movePos.x;
+		tmpAttackPos.y += movePos.y;
+	}
+	break;
+
+	case DESTROYER_DESTROY:
+	
+	movePos.x = m_AttackPosArr[m_AttackTurn - 1].x - tmpAttackPos.x;
+	movePos.y = m_AttackPosArr[m_AttackTurn - 1].y - tmpAttackPos.y;
+
+	for (int i = 0; i < DESTROYER_SIZE; ++i)
+	{
+		m_PlayerMap->MarkAttackResult(attackedPos, SHIP_DESTROYED);
+		tmpAttackPos.x += movePos.x;
+		tmpAttackPos.y += movePos.y;
+
+	}
+	break;
+	case HITREUSLT_MAX:
+	break;
+	default:
+	break;
+	}
+}
+
+void Player::InitRemainShip()
+{
+	m_OtherRemainShipCheck[SHIP_TYPE_NONE] = 0;
+	m_OtherRemainShipCheck[AIRCRAFT] = 1;
+	m_OtherRemainShipCheck[BATTLESHIP] = 1;
+	m_OtherRemainShipCheck[CRUISER] = 1;
+	m_OtherRemainShipCheck[DESTROYER] = 2;
+}
+
+void Player::InitAttakPosArr()
+{
+	memset(m_AttackPosArr, -1, sizeof(m_AttackPosArr)*(MAX_HORIZONTAL*MAX_VERTICAL));
+}
+
+void Player::InitHitResultArr()
+{
+	memset(m_HitResultArr, HIT_NONE, sizeof(m_HitResultArr)*(MAX_HORIZONTAL*MAX_VERTICAL));
+}
+
+void Player::InitAttackedPosArr()
+{
+	memset(m_AttackedPosFromOtherPlayerArr, -1, sizeof(m_AttackedPosFromOtherPlayerArr)*(MAX_HORIZONTAL*MAX_VERTICAL));
+}
+
+void Player::SetAttackedPosArr(ShipPos attackedPos, int eachGameTurn)
+{
+	_ASSERT(attackedPos.x < MAX_HORIZONTAL && attackedPos.x >= HORIZONTAL_ZERO);
+	_ASSERT(attackedPos.y < MAX_VERTICAL && attackedPos.y >= VERTICAL_ZERO);
+	if (!(attackedPos.x < MAX_HORIZONTAL &&
+		attackedPos.x >= HORIZONTAL_ZERO))
+	{
+		return;
+	}
+	if (!(attackedPos.y < MAX_VERTICAL &&
+		attackedPos.y >= VERTICAL_ZERO))
+	{
+		return;
+	}
+
+	m_AttackedPosFromOtherPlayerArr[eachGameTurn] = attackedPos;
+}
+
+void Player::SetAttackPosArr()
+{
+	m_AttackPosArr[m_AttackTurn] = m_AttackPos;
+}
+
+void Player::InitAttackTurn()
+{
+	m_AttackTurn = -1;
+}
+
+void Player::CheckRemainShip()
+{
+	switch (m_AttackedResultFromGM)
+	{
+	
+	case AIRCRAFT_DESTROY:
+	--m_OtherRemainShipCheck[AIRCRAFT];
+	break;
+	case BATTLESHIP_DESTROY:
+	--m_OtherRemainShipCheck[BATTLESHIP];
+	break;
+	case CRUISER_DESTROY:
+	--m_OtherRemainShipCheck[CRUISER];
+	break;
+	case DESTROYER_DESTROY:
+	--m_OtherRemainShipCheck[DESTROYER];
+	break;
+	
+	default:
+	break;
+	}
+}
+
+void Player::PrintOtherPlayerMap()
+{
+	printf_s("Attacker's Map\n");
+	m_OtherPlayerMap->PrintMapData();
+}
+
+

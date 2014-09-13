@@ -16,11 +16,11 @@ Map::~Map()
 
 void Map::MakeMap()
 {
-	m_Map = new int*[MAX_HORIZONTAL];
+	m_Map = new MapState*[MAX_HORIZONTAL];
 
 	for (int i = 0; i < MAX_HORIZONTAL; ++i)
 	{
-		m_Map[i] = new int[MAX_VERTICAL];
+		m_Map[i] = new MapState[MAX_VERTICAL];
 	}
 	return;
 }
@@ -40,14 +40,16 @@ void Map::InitMap()
 
 	for (int i = 0; i < MAX_HORIZONTAL; ++i)
 	{
-		memset(m_Map[i], 0, sizeof(int)*MAX_VERTICAL);
+		memset(m_Map[i], MAP_NONE, sizeof(int)*MAX_VERTICAL);
 	}
 	return;
 }
 
 void Map::PrintMapData()
 {
+	
 	printf_s("\n");
+	
 	for (int i = 0; i < MAX_HORIZONTAL; ++i)
 	{
 		for (int j = 0; j < MAX_VERTICAL; ++j)
@@ -58,7 +60,7 @@ void Map::PrintMapData()
 	}
 }
 
-int Map::GetEachPosDataInMap(ShipPos inputShipPos)
+MapState Map::GetEachPosDataInMap(ShipPos inputShipPos)
 {
 	_ASSERT(inputShipPos.x  <  MAX_HORIZONTAL &&
 		    inputShipPos.x  >= HORIZONTAL_ZERO);
@@ -76,12 +78,12 @@ int Map::GetEachPosDataInMap(ShipPos inputShipPos)
 		return MAP_NONE;
 	}
 
-	int tmpData = m_Map[inputShipPos.x][inputShipPos.y];
+	MapState tmpData = m_Map[inputShipPos.x][inputShipPos.y];
 
 	return tmpData;
 }
 
-int Map::GetEachPosDataInMap(char _x, char _y)
+MapState Map::GetEachPosDataInMap(char _x, char _y)
 {
 	_ASSERT(_x < MAX_HORIZONTAL && _y >= HORIZONTAL_ZERO);
 	_ASSERT(_x < MAX_VERTICAL && _y >= VERTICAL_ZERO);
@@ -91,7 +93,7 @@ int Map::GetEachPosDataInMap(char _x, char _y)
 		return MAP_NONE;
 	}
 
-	int tmpData = m_Map[_x][_y];
+	MapState tmpData = m_Map[_x][_y];
 	return tmpData;
 
 }
@@ -119,37 +121,29 @@ void Map::SetEachPosDataInMap(ShipPos inputShipPos)
 
 }
 
-void Map::MarkAttackedPos(ShipPos AttackedPos)
+
+
+void Map::MarkAttackResult(ShipPos attackedPos, MapState inputMapState)
 {
-	_ASSERT(AttackedPos.x < MAX_HORIZONTAL &&
-		AttackedPos.x >= HORIZONTAL_ZERO);
-	_ASSERT(AttackedPos.y < MAX_VERTICAL &&
-		AttackedPos.y >= VERTICAL_ZERO);
+	_ASSERT(attackedPos.x < MAX_HORIZONTAL &&
+		attackedPos.x >= HORIZONTAL_ZERO);
+	_ASSERT(attackedPos.y < MAX_VERTICAL &&
+		attackedPos.y >= VERTICAL_ZERO);
 
-	if (!(AttackedPos.x < MAX_HORIZONTAL &&
-		  AttackedPos.x >= HORIZONTAL_ZERO))
+	if (!(attackedPos.x < MAX_HORIZONTAL &&
+		attackedPos.x >= HORIZONTAL_ZERO))
 	{
 		//printf_s("Attacking is not available to current pos\n");
 		return;
 	}
-	if (!(AttackedPos.y < MAX_VERTICAL &&
-		  AttackedPos.y >= VERTICAL_ZERO))
+	if (!(attackedPos.y < MAX_VERTICAL &&
+		attackedPos.y >= VERTICAL_ZERO))
 	{
 		//printf_s("Attacking is not available to current pos\n");
 		return;
 	}
 
-	if (m_Map[AttackedPos.x][AttackedPos.y] == SHIP_LAUNCH)
-	{
-		m_Map[AttackedPos.x][AttackedPos.y] = SHIP_ATTACEKED;
-	}
-	else if (m_Map[AttackedPos.x][AttackedPos.y] == MAP_NONE)
-	{
-		m_Map[AttackedPos.x][AttackedPos.y] = MISSED_ATTACK;
-	}
-	else
-	{
-		//printf_s("Attacking is not available to current pos\n");
-	}
-	
+	//attack result에 따라서 위치에 표시만 하는거야돼 이전에 판단은 player에서 해서 와야지 
+
+
 }
