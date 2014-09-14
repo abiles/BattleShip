@@ -56,19 +56,20 @@ public:
 	void		 PrintOtherPlayerMap();
 
 private:
+	//공격
 	ShipPos					m_AttackPos;
 	Map*					m_OtherPlayerMap;
 	HitResult				m_AttackedResultFromGM;
 	GameMode				m_GameMode;
-	int*					m_OtherRemainShipCheck;
-	ShipPos*				m_AttackPosArr;
-	HitResult*				m_HitResultArr;
+	int						m_OtherRemainShipCheck[SHIP_TYPE_END];
+	ShipPos					m_AttackPosArr[MAX_HORIZONTAL*MAX_VERTICAL];
+	HitResult				m_HitResultArr[MAX_HORIZONTAL*MAX_VERTICAL];
 	int						m_AttackTurn;
 
-
+	//방어
 	Map*					m_PlayerMap;
 	ShipPos					m_PosAttackedFromOtherPlayer;
-	ShipPos*				m_AttackedPosFromOtherPlayerArr;
+	ShipPos					m_AttackedPosFromOtherPlayerArr[MAX_HORIZONTAL*MAX_VERTICAL];
 	std::vector<Ship*>		m_ShipVector;
 	HitResult				m_AttackedResult;
 

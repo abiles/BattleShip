@@ -48,7 +48,6 @@ void Map::InitMap()
 void Map::PrintMapData()
 {
 	
-	printf_s("\n");
 	
 	for (int i = 0; i < MAX_HORIZONTAL; ++i)
 	{
@@ -88,7 +87,7 @@ MapState Map::GetEachPosDataInMap(char _x, char _y)
 	_ASSERT(_x < MAX_HORIZONTAL && _y >= HORIZONTAL_ZERO);
 	_ASSERT(_x < MAX_VERTICAL && _y >= VERTICAL_ZERO);
 
-	if (!(_x < MAX_HORIZONTAL && _y >= HORIZONTAL_ZERO) || !(_x < MAX_VERTICAL && _y >= VERTICAL_ZERO))
+	if (!(_x < MAX_HORIZONTAL && _x >= HORIZONTAL_ZERO) || !(_y < MAX_VERTICAL && _y >= VERTICAL_ZERO))
 	{
 		return MAP_NONE;
 	}

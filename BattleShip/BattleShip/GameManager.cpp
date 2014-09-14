@@ -90,9 +90,10 @@ void GameManager::PlayingGame()
 			m_Attacker->PrintOtherPlayerMap();
 			m_Defender->PrintMap();
 			
-			++totalTurnNum;
+			
 			++EachGameTurn;
 		}
+		totalTurnNum += EachGameTurn;
 		printf_s("this game turn %d\n", EachGameTurn);
 		EachGameTurn = 0;
 	

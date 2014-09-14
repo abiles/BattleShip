@@ -19,10 +19,10 @@ Player::Player()
 	m_ShipVector.push_back(new Destroyer());
 	m_ShipVector.push_back(new Destroyer());
 	m_GameMode = HUNTMODE;
-	m_HitResultArr = new HitResult[MAX_HORIZONTAL*MAX_VERTICAL];
+	/*m_HitResultArr = new HitResult[MAX_HORIZONTAL*MAX_VERTICAL];
 	m_AttackPosArr = new ShipPos[MAX_HORIZONTAL*MAX_VERTICAL];
-	m_AttackedPosFromOtherPlayerArr = new ShipPos[MAX_HORIZONTAL*MAX_VERTICAL];
-	m_OtherRemainShipCheck = new int[SHIP_TYPE_END];
+	m_AttackedPosFromOtherPlayerArr = new ShipPos[MAX_HORIZONTAL*MAX_VERTICAL];*/
+	//m_OtherRemainShipCheck = new int[SHIP_TYPE_END];
 	m_AttackTurn = -1;
 
 }
@@ -32,10 +32,10 @@ Player::~Player()
 {
 	delete   m_PlayerMap;
 	delete   m_OtherPlayerMap;
-	delete[] m_HitResultArr;
+	/*delete[] m_HitResultArr;
 	delete[] m_AttackPosArr;
 	delete[] m_AttackedPosFromOtherPlayerArr;
-	delete[] m_OtherRemainShipCheck;
+	delete[] m_OtherRemainShipCheck;*/
 
 	for (auto iterShip = m_ShipVector.begin(); iterShip != m_ShipVector.end();)
 	{
@@ -539,6 +539,7 @@ void Player::PrintShips()
 
 void Player::PrintMap()
 {
+	printf_s("\n");
 	printf_s("Defender's Map\n");
 	m_PlayerMap->PrintMapData();
 }
@@ -627,7 +628,7 @@ void Player::MakrAttackResultToPlayerMap(ShipPos attackedPos)
 	ShipPos movePos = { 0, };
 	ShipPos tmpAttackPos = attackedPos;
 
-	switch (m_AttackedResultFromGM)
+	switch (m_AttackedResult)
 	{
 	case HIT_NONE:
 	break;
@@ -712,17 +713,17 @@ void Player::InitRemainShip()
 
 void Player::InitAttakPosArr()
 {
-	memset(m_AttackPosArr, -1, sizeof(m_AttackPosArr)*(MAX_HORIZONTAL*MAX_VERTICAL));
+	memset(m_AttackPosArr, -1, sizeof(ShipPos)*(MAX_HORIZONTAL*MAX_VERTICAL));
 }
 
 void Player::InitHitResultArr()
 {
-	memset(m_HitResultArr, HIT_NONE, sizeof(m_HitResultArr)*(MAX_HORIZONTAL*MAX_VERTICAL));
+	memset(m_HitResultArr, HIT_NONE, sizeof(HitResult)*(MAX_HORIZONTAL*MAX_VERTICAL));
 }
 
 void Player::InitAttackedPosArr()
 {
-	memset(m_AttackedPosFromOtherPlayerArr, -1, sizeof(m_AttackedPosFromOtherPlayerArr)*(MAX_HORIZONTAL*MAX_VERTICAL));
+	memset(m_AttackedPosFromOtherPlayerArr, -1, sizeof(ShipPos)*(MAX_HORIZONTAL*MAX_VERTICAL));
 }
 
 void Player::SetAttackedPosArr(ShipPos attackedPos, int eachGameTurn)
@@ -778,6 +779,7 @@ void Player::CheckRemainShip()
 
 void Player::PrintOtherPlayerMap()
 {
+	printf_s("\n");
 	printf_s("Attacker's Map\n");
 	m_OtherPlayerMap->PrintMapData();
 }
