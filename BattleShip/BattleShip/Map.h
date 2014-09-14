@@ -17,11 +17,11 @@ public:
 	MapState  GetEachPosDataInMap(ShipPos inputShipPos);
 	MapState  GetEachPosDataInMap(char x, char y);
 
-	void SetEachPosDataInMap(ShipPos shipPos);
+	void	  SetEachPosDataInMap(ShipPos shipPos);
 	//void SetEachPosDataInMap(char x, char y);
 
 
-	void MarkAttackResult(ShipPos attackedPos, MapState inputMapState);
+	void	  MarkAttackResult(ShipPos attackedPos, MapState inputMapState);
 private:
 	MapState** m_Map;
 };

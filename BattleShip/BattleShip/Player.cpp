@@ -24,7 +24,8 @@ Player::Player()
 	m_AttackedPosFromOtherPlayerArr = new ShipPos[MAX_HORIZONTAL*MAX_VERTICAL];*/
 	//m_OtherRemainShipCheck = new int[SHIP_TYPE_END];
 	m_AttackTurn = -1;
-	m_PotentialTargetVector.reserve(MAX_DIRECTION);
+	m_PotentialTargetStack;
+	//m_PotentialTargetStack.resize(MAX_DIRECTION, nullptr);
 
 }
 
@@ -52,20 +53,20 @@ Player::~Player()
 		}
 	}
 
-	for (auto iterShip = m_PotentialTargetVector.begin();
-		iterShip != m_PotentialTargetVector.end();)
-	{
-		if ((*iterShip))
-		{
-			delete (*iterShip);
-			*iterShip = nullptr;
-			iterShip = m_PotentialTargetVector.erase(iterShip);
-		}
-		else
-		{
-			iterShip = m_PotentialTargetVector.erase(iterShip);
-		}
-	}
+	//for (auto iterShip = m_PotentialTargetStack.begin();
+	//	iterShip != m_PotentialTargetStack.end();)
+	//{
+	//	if ((*iterShip))
+	//	{
+	//		delete (*iterShip);
+	//		*iterShip = nullptr;
+	//		iterShip = m_PotentialTargetStack.erase(iterShip);
+	//	}
+	//	else
+	//	{
+	//		iterShip = m_PotentialTargetStack.erase(iterShip);
+	//	}
+	//}
 
 	
 	m_ShipVector.clear();
@@ -337,13 +338,18 @@ void Player::ValidPosSetToMap(ShipPos inputShipPos, ShipDirection inputDir, int 
 ShipPos Player::SelectPosToAttack()
 {
 	srand((unsigned int)time(NULL));
-	
+
+
 	++m_AttackTurn;
 	m_GameMode = ModeSelect();
 
 	switch (m_GameMode)
 	{
 	case HUNTMODE:
+	
+	InitPotentialStack();
+	
+	
 	//·£´ýÀ¸·Î ½î±â
 	do
 	{
@@ -353,7 +359,39 @@ ShipPos Player::SelectPosToAttack()
 		
 	} while (!SelectFineRandAttackPos());
 	break;
+
 	case TARGETMODE:
+
+	if (!m_PotentialTargetSetCheck)
+	{
+		SetPotentialTarget();
+	}
+
+	if (m_AttackedResultFromGM == HIT)
+	{
+		ShipPos tmpPos = { 0, };
+		ShipPos dirPos = { 0, };
+		int tmpTurn = m_AttackTurn -1;
+		while (m_HitResultArr[tmpTurn] != HIT)
+		{
+			--tmpTurn;
+		}
+
+
+		m_AttackPos.x += (m_AttackPos.x - m_AttackPosArr[tmpTurn].x);
+		m_AttackPos.y += (m_AttackPos.y - m_AttackPosArr[tmpTurn].y);
+
+	}
+	/*else if (m_HitResultArr[m_AttackTurn - 1] == HIT &&
+		m_AttackedResultFromGM == MISS)
+	{
+		
+	}*/
+	else
+	{
+		m_AttackPos = m_PotentialTargetStack.top();
+		m_PotentialTargetStack.pop();
+	}
 
 	break;
 	default:
@@ -808,6 +846,7 @@ void Player::PrintOtherPlayerMap()
 GameMode Player::ModeSelect()
 {
 	GameMode tmpMode;
+
 	if (m_AttackedResultFromGM == HIT)
 	{
 		tmpMode = TARGETMODE;
@@ -828,14 +867,14 @@ GameMode Player::ModeSelect()
 void Player::SetPotentialTarget()
 {
 	
-
+	m_PotentialTargetSetCheck = true;
 	if (m_AttackPos.y-1 >= VERTICAL_ZERO &&
 		m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos.x, m_AttackPos.y-1) == MAP_NONE)
 	{
 		ShipPos tmpPos;
 		tmpPos.x = m_AttackPos.x;
 		tmpPos.y = m_AttackPos.y-1;
-		m_PotentialTargetVector.push_back(&tmpPos);
+		m_PotentialTargetStack.push(tmpPos);
 	}
 
 	if (m_AttackPos.x +1 < MAX_HORIZONTAL &&
@@ -844,7 +883,7 @@ void Player::SetPotentialTarget()
 		ShipPos tmpPos;
 		tmpPos.x = m_AttackPos.x+1;
 		tmpPos.y = m_AttackPos.y;
-		m_PotentialTargetVector.push_back(&tmpPos);
+		m_PotentialTargetStack.push(tmpPos);
 	}
 
 	if (m_AttackPos.y+1 < MAX_VERTICAL &&
@@ -853,7 +892,7 @@ void Player::SetPotentialTarget()
 		ShipPos tmpPos;
 		tmpPos.x = m_AttackPos.x;
 		tmpPos.y = m_AttackPos.y+1;
-		m_PotentialTargetVector.push_back(&tmpPos);
+		m_PotentialTargetStack.push(tmpPos);
 	}
 
 	if (m_AttackPos.x -1 >= HORIZONTAL_ZERO &&
@@ -862,10 +901,20 @@ void Player::SetPotentialTarget()
 		ShipPos tmpPos;
 		tmpPos.x = m_AttackPos.x - 1;
 		tmpPos.y = m_AttackPos.y;
-		m_PotentialTargetVector.push_back(&tmpPos);
+		m_PotentialTargetStack.push(tmpPos);
 	}
 
 	
+}
+
+void Player::InitPotentialStack()
+{
+	m_PotentialTargetSetCheck = false;
+	while (!m_PotentialTargetStack.empty())
+	{
+		m_PotentialTargetStack.pop();
+	}
+
 }
 
 

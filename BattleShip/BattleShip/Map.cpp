@@ -62,7 +62,7 @@ void Map::PrintMapData()
 MapState Map::GetEachPosDataInMap(ShipPos inputShipPos)
 {
 	_ASSERT(inputShipPos.x  <  MAX_HORIZONTAL &&
-		    inputShipPos.x  >= HORIZONTAL_ZERO);
+			inputShipPos.x  >= HORIZONTAL_ZERO);
 	_ASSERT(inputShipPos.y  <  MAX_VERTICAL &&
 			inputShipPos.y  >= VERTICAL_ZERO);
 
@@ -102,7 +102,7 @@ MapState Map::GetEachPosDataInMap(char _x, char _y)
 void Map::SetEachPosDataInMap(ShipPos inputShipPos)
 {
 	_ASSERT(inputShipPos.x < MAX_HORIZONTAL &&
-		    inputShipPos.x >= HORIZONTAL_ZERO);
+			inputShipPos.x >= HORIZONTAL_ZERO);
 	_ASSERT(inputShipPos.y < MAX_VERTICAL &&
 			inputShipPos.y >= VERTICAL_ZERO);
 

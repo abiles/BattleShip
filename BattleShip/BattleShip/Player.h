@@ -48,9 +48,10 @@ public:
 	void		 InitAttacekedPos();
 	void		 InitPlayerMap();
 	void		 InitShipPos();
-	void		 InitDefender();
 	void		 InitShipHP();
 	void		 InitAttackedPosArr();
+	void		 InitPotentialStack();
+	void		 InitDefender();
 
 	//프린트
 	void		 PrintShips();
@@ -67,7 +68,9 @@ private:
 	ShipPos					m_AttackPosArr[MAX_HORIZONTAL*MAX_VERTICAL];
 	HitResult				m_HitResultArr[MAX_HORIZONTAL*MAX_VERTICAL];
 	int						m_AttackTurn;
-	std::vector<ShipPos*>	m_PotentialTargetVector;
+	//std::vector<ShipPos*>	m_PotentialTargetVector;
+	std::stack<ShipPos>		m_PotentialTargetStack;
+	bool					m_PotentialTargetSetCheck;
 
 	//방어
 	Map*					m_PlayerMap;

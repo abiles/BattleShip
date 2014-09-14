@@ -77,6 +77,7 @@ void GameManager::PlayingGame()
 			m_AttackPosFromPlayer = m_Attacker->SelectPosToAttack();
 			m_Attacker->SetAttackPosArr();
 			system("cls");
+			
 			m_Defender->SetAttackedPos(m_AttackPosFromPlayer);
 			m_Defender->SetAttackedPosArr(m_AttackPosFromPlayer, EachGameTurn);
 			m_Defender->SetAttackedResult();
