@@ -29,6 +29,7 @@ public:
 	void		 CheckRemainShip();
 	GameMode	 ModeSelect();
 	void		 SetPotentialTarget();
+	bool		 IsFullSizePosInMap(ShipSize inputSize);
 	void		 InitAttackPos();
 	void		 InitOtherPlayerMap();
 	void		 InitRemainShip();
@@ -36,6 +37,7 @@ public:
 	void		 InitHitResultArr();
 	void		 InitAttackTurn();
 	void		 InitGameMode();
+	void		 InitAttackResultFromGM();
 	void		 InitAttacker();
 
 	//¹æ¾î

@@ -18,13 +18,13 @@ Player::Player()
 	m_ShipVector.push_back(new Cruiser());
 	m_ShipVector.push_back(new Destroyer());
 	m_ShipVector.push_back(new Destroyer());
-	m_GameMode = HUNTMODE;
+	//m_GameMode = HUNTMODE;
 	/*m_HitResultArr = new HitResult[MAX_HORIZONTAL*MAX_VERTICAL];
 	m_AttackPosArr = new ShipPos[MAX_HORIZONTAL*MAX_VERTICAL];
 	m_AttackedPosFromOtherPlayerArr = new ShipPos[MAX_HORIZONTAL*MAX_VERTICAL];*/
 	//m_OtherRemainShipCheck = new int[SHIP_TYPE_END];
-	m_AttackTurn = -1;
-	m_PotentialTargetStack;
+	//m_AttackTurn = -1;
+	//m_PotentialTargetStack;
 	//m_PotentialTargetStack.resize(MAX_DIRECTION, nullptr);
 
 }
@@ -362,7 +362,7 @@ ShipPos Player::SelectPosToAttack()
 		SetPotentialTarget();
 	}
 
-	if (!m_PotentialTargetStack.empty())
+	if (!(m_PotentialTargetStack.empty()))
 	{
 		m_AttackPos = m_PotentialTargetStack.top();
 		m_PotentialTargetStack.pop();
@@ -370,6 +370,11 @@ ShipPos Player::SelectPosToAttack()
 	else
 	{
 		m_GameMode = HUNTMODE;
+		do
+		{
+			m_AttackPos.x = rand() % MAX_HORIZONTAL;
+			m_AttackPos.y = rand() % MAX_VERTICAL;
+		} while (!SelectFineRandAttackPos());
 	}
 	break;
 	default:
@@ -381,36 +386,113 @@ ShipPos Player::SelectPosToAttack()
 
 bool Player::SelectFineRandAttackPos()
 {
-	
+	srand((unsigned int)time(NULL));
 	if (m_OtherRemainShipCheck[DESTROYER] == 0 &&
 		m_OtherRemainShipCheck[CRUISER] == 0 &&
 		m_OtherRemainShipCheck[BATTLESHIP] == 0)
 	{
-		if (((m_AttackPos.x + m_AttackPos.y) % AIRCRAFT_SIZE) != 0)
+		if (!IsFullSizePosInMap(AIRCRAFT_SIZE))
 		{
-			return false;
+			if (((m_AttackPos.x + m_AttackPos.y) % AIRCRAFT_SIZE) != 0)
+			{
+				return false;
+			}
 		}
+		else
+		{
+			for (char i = 0; i < MAX_HORIZONTAL; ++i)
+			{
+				for (char j = 0; j < MAX_VERTICAL; ++j)
+				{
+					if (m_OtherPlayerMap->GetEachPosDataInMap(i, j) == MAP_NONE)
+					{
+						m_AttackPos.x = i;
+						m_AttackPos.y = j;
+					}
+				}
+			}
+// 			m_AttackPos.x = rand() % MAX_HORIZONTAL;
+// 			m_AttackPos.y = rand() % MAX_VERTICAL;
+		}
+
 	}
 	else if (m_OtherRemainShipCheck[DESTROYER] == 0 &&
 			 m_OtherRemainShipCheck[CRUISER] == 0)
 	{
-		if (((m_AttackPos.x + m_AttackPos.y) % BATTLESHIP_SZIE) != 0)
+		if (!IsFullSizePosInMap(BATTLESHIP_SZIE))
 		{
-			return false;
+			if (((m_AttackPos.x + m_AttackPos.y) % BATTLESHIP_SZIE) != 0)
+			{
+				return false;
+			}
+		}
+		else
+		{
+			for (char i = 0; i < MAX_HORIZONTAL; ++i)
+			{
+				for (char j = 0; j < MAX_VERTICAL; ++j)
+				{
+					if (m_OtherPlayerMap->GetEachPosDataInMap(i, j) == MAP_NONE)
+					{
+						m_AttackPos.x = i;
+						m_AttackPos.y = j;
+					}
+				}
+			}
+// 			m_AttackPos.x = rand() % MAX_HORIZONTAL;
+// 			m_AttackPos.y = rand() % MAX_VERTICAL;
 		}
 	}
 	else if (m_OtherRemainShipCheck[DESTROYER] == 0)
 	{
-		if (((m_AttackPos.x + m_AttackPos.y) % CRUISER_SIZE) != 0)
+		if (!IsFullSizePosInMap(CRUISER_SIZE))
 		{
-			return false;
+			if (((m_AttackPos.x + m_AttackPos.y) % CRUISER_SIZE) != 0)
+			{
+				return false;
+			}
+		}
+		else
+		{
+			for (char i = 0; i < MAX_HORIZONTAL; ++i)
+			{
+				for (char j = 0; j < MAX_VERTICAL; ++j)
+				{
+					if (m_OtherPlayerMap->GetEachPosDataInMap(i, j) == MAP_NONE)
+					{
+						m_AttackPos.x = i;
+						m_AttackPos.y = j;
+					}
+				}
+			}
+// 			m_AttackPos.x = rand() % MAX_HORIZONTAL;
+// 			m_AttackPos.y = rand() % MAX_VERTICAL;
 		}
 	}
 	else
 	{
-		if (((m_AttackPos.x + m_AttackPos.y) % DESTROYER_SIZE) != 0)
+		if (!IsFullSizePosInMap(DESTROYER_SIZE))
 		{
-			return false;
+			if (((m_AttackPos.x + m_AttackPos.y) % DESTROYER_SIZE) != 0)
+			{
+				return false;
+			}
+		}
+		else
+		{
+			for (char i = 0; i < MAX_HORIZONTAL; ++i)
+			{
+				for (char j = 0; j < MAX_VERTICAL; ++j)
+				{
+					if (m_OtherPlayerMap->GetEachPosDataInMap(i, j) == MAP_NONE)
+					{
+						m_AttackPos.x = i;
+						m_AttackPos.y = j;
+					}
+				}
+			}
+			//m_AttackPos.x = rand() % MAX_HORIZONTAL;
+			//m_AttackPos.y = rand() % MAX_VERTICAL;
 		}
 	}
 	
@@ -465,9 +547,10 @@ void Player::SetAttackedResult()
 	
 	for (std::vector<Ship*>::size_type i = 0; i < m_ShipVector.size(); ++i)
 	{
-		m_AttackedResult = m_ShipVector[i]->CheckAttack(m_PosAttackedFromOtherPlayer);
-		if (m_AttackedResult != HIT_NONE)
+		
+		if (m_ShipVector[i]->CheckAttack(m_PosAttackedFromOtherPlayer) != HIT_NONE)
 		{
+			m_AttackedResult = m_ShipVector[i]->CheckAttack(m_PosAttackedFromOtherPlayer);
 			return;
 		}
 	}
@@ -491,7 +574,7 @@ void Player::SetAttackedResultFromGM(HitResult inputHitResult)
 
 void Player::MakrAttackResultToOtherPlayerMap()
 {
-	ShipPos movePos = { 0, };
+	//ShipPos movePos = { 0, };
 	ShipPos tmpAttackPos = m_AttackPos;
 
 
@@ -602,6 +685,7 @@ void Player::PrintShips()
 void Player::PrintMap()
 {
 	printf_s("\n");
+	printf_s("\t\t\t\t");
 	printf_s("Defender's Map\n");
 	m_PlayerMap->PrintMapData();
 }
@@ -647,10 +731,11 @@ void Player::InitShipPos()
 void Player::InitAttacker()
 {
 	InitAttackPos();
+	InitAttackResultFromGM();
 	InitOtherPlayerMap();
 	InitRemainShip();
-	InitHitResultArr();
-	InitAttakPosArr();
+	//InitHitResultArr();
+	//InitAttakPosArr();
 	InitAttackTurn();
 	InitGameMode();
 }
@@ -856,6 +941,7 @@ void Player::CheckRemainShip()
 void Player::PrintOtherPlayerMap()
 {
 	printf_s("\n");
+	printf_s("\t\t\t\t");
 	printf_s("Attacker's Map\n");
 	m_OtherPlayerMap->PrintMapData();
 }
@@ -884,7 +970,7 @@ GameMode Player::ModeSelect()
 void Player::SetPotentialTarget()
 {
 	
-	m_PotentialTargetSetCheck = true;
+	//m_PotentialTargetSetCheck = true;
 	if (m_AttackPos.y-1 >= VERTICAL_ZERO &&
 		m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos.x, m_AttackPos.y-1) == MAP_NONE)
 	{
@@ -957,6 +1043,32 @@ bool Player::IsReMainShipInPlayerMap()
 void Player::InitGameMode()
 {
 	m_GameMode = HUNTMODE;
+}
+
+void Player::InitAttackResultFromGM()
+{
+	m_AttackedResultFromGM = HIT_NONE;
+}
+
+bool Player::IsFullSizePosInMap(ShipSize inputSize)
+{
+	for (char i = 0; i < MAX_HORIZONTAL; ++i)
+	{
+		for (char j = 0; j < MAX_VERTICAL; ++j)
+		{
+			if ((i + j) % inputSize == 0)
+			{
+				if (m_OtherPlayerMap->GetEachPosDataInMap(i, j) == MAP_NONE)
+				{
+					m_AttackPos.x = i;
+					m_AttackPos.y = j;
+					return false;
+				}
+			}
+		}
+	}
+
+	return true;
 }
 
 

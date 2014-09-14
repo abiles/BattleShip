@@ -47,10 +47,12 @@ void Map::InitMap()
 
 void Map::PrintMapData()
 {
-	
-	
+	std::string tmpStr;
+
+
 	for (int i = 0; i < MAX_HORIZONTAL; ++i)
 	{
+		printf_s("\t\t\t\t");
 		if (i == 0)
 		{
 			printf_s("  ");
@@ -59,14 +61,38 @@ void Map::PrintMapData()
 				printf_s("%d ", k);
 			}
 			printf_s("\n");
+			printf_s("\t\t\t\t");
 		}
 		for (int j = 0; j < MAX_VERTICAL; ++j)
 		{
 			if (j == 0)
 			{
+				
 				printf_s("%c ", 'a' + i);
 			}
-			printf_s("%d ", m_Map[i][j]);
+
+			if (m_Map[i][j] == MAP_NONE)
+			{
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x0007);
+				tmpStr = "бс";
+			}
+			else if (m_Map[i][j] == SHIP_LAUNCH)
+			{
+				tmpStr = "ме" ;
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x0006);
+			}
+			else if (m_Map[i][j] == SHIP_ATTACEKED)
+			{
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x0004);
+				tmpStr = "в├";
+			}
+			else
+			{
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x0001);
+				tmpStr = "бр";
+			}
+			printf_s("%s", tmpStr.c_str());
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x0008);
 		}
 		
 		printf_s("\n");
@@ -98,8 +124,8 @@ MapState Map::GetEachPosDataInMap(ShipPos inputShipPos)
 
 MapState Map::GetEachPosDataInMap(char _x, char _y)
 {
-	_ASSERT(_x < MAX_HORIZONTAL && _y >= HORIZONTAL_ZERO);
-	_ASSERT(_x < MAX_VERTICAL && _y >= VERTICAL_ZERO);
+	_ASSERT(_x < MAX_HORIZONTAL && _x >= HORIZONTAL_ZERO);
+	_ASSERT(_y < MAX_VERTICAL && _y >= VERTICAL_ZERO);
 
 	if (!(_x < MAX_HORIZONTAL && _x >= HORIZONTAL_ZERO) || !(_y < MAX_VERTICAL && _y >= VERTICAL_ZERO))
 	{

@@ -239,9 +239,10 @@ void Ship::PrintShipPos()
 			break;
 		}
 		tmpChar = m_Pos[i].x + 'a';
+		
 		printf_s("%c%d\t", tmpChar, m_Pos[i].y);
 	}
-
+	printf_s("\t\t\t\t");
 	printf_s("\n");
 }
 
