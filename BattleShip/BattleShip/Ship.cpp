@@ -205,7 +205,7 @@ HitResult Ship::CheckAttack(ShipPos attackedPos)
 		return HIT_NONE;
 	}
 
-	for (int i = 0; i < this->GetSize(); ++i)
+	for (int i = 0; i < GetSize(); ++i)
 	{
 		if (GetPos(i).x == attackedPos.x && GetPos(i).y == attackedPos.y)
 		{

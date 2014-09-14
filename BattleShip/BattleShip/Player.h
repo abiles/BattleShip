@@ -29,6 +29,7 @@ public:
 	void		 CheckRemainShip();
 	GameMode	 ModeSelect();
 	void		 SetPotentialTarget();
+	void		 SelectHighPoint();
 	bool		 IsFullSizePosInMap(ShipSize inputSize);
 	void		 InitAttackPos();
 	void		 InitOtherPlayerMap();
@@ -38,6 +39,8 @@ public:
 	void		 InitAttackTurn();
 	void		 InitGameMode();
 	void		 InitAttackResultFromGM();
+	void		 InitPointMap();
+	void		 InitPoidtMapToZero();
 	void		 InitAttacker();
 
 	//방어
@@ -75,6 +78,7 @@ private:
 	//std::vector<ShipPos*>	m_PotentialTargetVector;
 	std::stack<ShipPos>		m_PotentialTargetStack;
 	bool					m_PotentialTargetSetCheck;
+	Map*					m_PointMap;
 
 	//방어
 	Map*					m_PlayerMap;

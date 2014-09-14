@@ -34,7 +34,15 @@ enum MapState
 	SHIP_ATTACEKED,
 	MISSED_ATTACK,
 	SHIP_DESTROYED,
+	ZERO_POINT = 0,
+	ONE_POINT = 1,
+	TWO_POINT = 2 ,
+	THREE_POINT = 3,
+	FOUR_POINT = 4,
+	FIVE_POINT = 5,
+	SIX_POINT = 6,
 };
+
 
 enum MapSize
 {

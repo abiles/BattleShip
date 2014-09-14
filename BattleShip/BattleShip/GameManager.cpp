@@ -76,13 +76,14 @@ void GameManager::PlayingGame()
 
 		while (!IsGameEnd())
 		{
+			//m_Defender->PrintMap();
 			m_AttackPosFromPlayer = m_Attacker->SelectPosToAttack();
 			//m_Attacker->SetAttackPosArr();
-			system("cls");
 			
 			m_Defender->SetAttackedPos(m_AttackPosFromPlayer);
 			//m_Defender->SetAttackedPosArr(m_AttackPosFromPlayer, EachGameTurn);
 			m_Defender->SetAttackedResult();
+			system("cls");
 			m_Defender->MakrAttackResultToPlayerMap(m_AttackPosFromPlayer);
 			m_AttackedResultFromDef = m_Defender->GetAttackedResult();
 			m_Attacker->SetAttackedResultFromGM(m_AttackedResultFromDef);

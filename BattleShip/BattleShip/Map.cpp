@@ -186,3 +186,77 @@ void Map::MarkAttackResult(ShipPos attackedPos, MapState inputMapState)
 
 	m_Map[attackedPos.x][attackedPos.y] = inputMapState;
 }
+
+void Map::SetEachPointInMap(ShipPos inputShipPos, MapState point)
+{
+	_ASSERT(inputShipPos.x < MAX_HORIZONTAL &&
+		inputShipPos.x >= HORIZONTAL_ZERO);
+	_ASSERT(inputShipPos.y < MAX_VERTICAL &&
+		inputShipPos.y >= VERTICAL_ZERO);
+	_ASSERT(point >= ZERO_POINT && point <= FIVE_POINT);
+
+	if (!(inputShipPos.x < MAX_HORIZONTAL &&
+		inputShipPos.x >= HORIZONTAL_ZERO))
+	{
+		return;
+	}
+	if (!(inputShipPos.y < MAX_VERTICAL &&
+		inputShipPos.y >= VERTICAL_ZERO))
+	{
+		return;
+	}
+	if (!(point >= ZERO_POINT && point <= FIVE_POINT))
+	{
+		return;
+	}
+
+	m_Map[inputShipPos.x][inputShipPos.y] = point;
+
+
+
+}
+
+void Map::SetEachPointInMap(char x, char y, MapState point)
+{
+	ShipPos tmpShip;
+	tmpShip.x = x;
+	tmpShip.y = y;
+
+	SetEachPointInMap(tmpShip, point);
+}
+
+//void Map::PointPlusInMap(ShipPos inputShipPos, MapState point)
+//{
+//	_ASSERT(inputShipPos.x < MAX_HORIZONTAL &&
+//		inputShipPos.x >= HORIZONTAL_ZERO);
+//	_ASSERT(inputShipPos.y < MAX_VERTICAL &&
+//		inputShipPos.y >= VERTICAL_ZERO);
+//	_ASSERT(point >= ZERO_POINT && point <= FIVE_POINT);
+//
+//	if (!(inputShipPos.x < MAX_HORIZONTAL &&
+//		inputShipPos.x >= HORIZONTAL_ZERO))
+//	{
+//		return;
+//	}
+//	if (!(inputShipPos.y < MAX_VERTICAL &&
+//		inputShipPos.y >= VERTICAL_ZERO))
+//	{
+//		return;
+//	}
+//	if (!(point >= ZERO_POINT && point <= FIVE_POINT))
+//	{
+//		return;
+//	}
+//	
+//	MapState tmpState;
+//
+//	if (point == SIX_POINT)
+//	{
+//		return;
+//	}
+//	else
+//	{
+//		m_Map[inputShipPos.x][inputShipPos.y];
+//	
+//	}
+//}

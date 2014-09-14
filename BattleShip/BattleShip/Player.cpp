@@ -12,6 +12,7 @@ Player::Player()
 {
 	m_PlayerMap = new Map();
 	m_OtherPlayerMap = new Map();
+	m_PointMap = new Map();
 	m_ShipVector.reserve(SHIP_TYPE_END);
 	m_ShipVector.push_back(new Aircraft());
 	m_ShipVector.push_back(new BattleShip());
@@ -34,6 +35,7 @@ Player::~Player()
 {
 	delete   m_PlayerMap;
 	delete   m_OtherPlayerMap;
+	delete   m_PointMap;
 	/*delete[] m_HitResultArr;
 	delete[] m_AttackPosArr;
 	delete[] m_AttackedPosFromOtherPlayerArr;
@@ -351,8 +353,7 @@ ShipPos Player::SelectPosToAttack()
 	case HUNTMODE:
 	do 
 	{
-		m_AttackPos.x = rand() % MAX_HORIZONTAL;
-		m_AttackPos.y = rand() % MAX_VERTICAL;
+		SelectHighPoint();
 	} while (!SelectFineRandAttackPos());
 
 	break;
@@ -372,8 +373,9 @@ ShipPos Player::SelectPosToAttack()
 		m_GameMode = HUNTMODE;
 		do
 		{
-			m_AttackPos.x = rand() % MAX_HORIZONTAL;
-			m_AttackPos.y = rand() % MAX_VERTICAL;
+			SelectHighPoint();
+			/*m_AttackPos.x = rand() % MAX_HORIZONTAL;
+			m_AttackPos.y = rand() % MAX_VERTICAL;*/
 		} while (!SelectFineRandAttackPos());
 	}
 	break;
@@ -386,115 +388,114 @@ ShipPos Player::SelectPosToAttack()
 
 bool Player::SelectFineRandAttackPos()
 {
-	srand((unsigned int)time(NULL));
-	if (m_OtherRemainShipCheck[DESTROYER] == 0 &&
-		m_OtherRemainShipCheck[CRUISER] == 0 &&
-		m_OtherRemainShipCheck[BATTLESHIP] == 0)
-	{
-		if (!IsFullSizePosInMap(AIRCRAFT_SIZE))
-		{
-			if (((m_AttackPos.x + m_AttackPos.y) % AIRCRAFT_SIZE) != 0)
-			{
-				return false;
-			}
-		}
-		else
-		{
-			for (char i = 0; i < MAX_HORIZONTAL; ++i)
-			{
-				for (char j = 0; j < MAX_VERTICAL; ++j)
-				{
-					if (m_OtherPlayerMap->GetEachPosDataInMap(i, j) == MAP_NONE)
-					{
-						m_AttackPos.x = i;
-						m_AttackPos.y = j;
-					}
-				}
-			}
-// 			m_AttackPos.x = rand() % MAX_HORIZONTAL;
-// 			m_AttackPos.y = rand() % MAX_VERTICAL;
-		}
 
-	}
-	else if (m_OtherRemainShipCheck[DESTROYER] == 0 &&
-			 m_OtherRemainShipCheck[CRUISER] == 0)
-	{
-		if (!IsFullSizePosInMap(BATTLESHIP_SZIE))
-		{
-			if (((m_AttackPos.x + m_AttackPos.y) % BATTLESHIP_SZIE) != 0)
-			{
-				return false;
-			}
-		}
-		else
-		{
-			for (char i = 0; i < MAX_HORIZONTAL; ++i)
-			{
-				for (char j = 0; j < MAX_VERTICAL; ++j)
-				{
-					if (m_OtherPlayerMap->GetEachPosDataInMap(i, j) == MAP_NONE)
-					{
-						m_AttackPos.x = i;
-						m_AttackPos.y = j;
-					}
-				}
-			}
-// 			m_AttackPos.x = rand() % MAX_HORIZONTAL;
-// 			m_AttackPos.y = rand() % MAX_VERTICAL;
-		}
-	}
-	else if (m_OtherRemainShipCheck[DESTROYER] == 0)
-	{
-		if (!IsFullSizePosInMap(CRUISER_SIZE))
-		{
-			if (((m_AttackPos.x + m_AttackPos.y) % CRUISER_SIZE) != 0)
-			{
-				return false;
-			}
-		}
-		else
-		{
-			for (char i = 0; i < MAX_HORIZONTAL; ++i)
-			{
-				for (char j = 0; j < MAX_VERTICAL; ++j)
-				{
-					if (m_OtherPlayerMap->GetEachPosDataInMap(i, j) == MAP_NONE)
-					{
-						m_AttackPos.x = i;
-						m_AttackPos.y = j;
-					}
-				}
-			}
-// 			m_AttackPos.x = rand() % MAX_HORIZONTAL;
-// 			m_AttackPos.y = rand() % MAX_VERTICAL;
-		}
-	}
-	else
-	{
-		if (!IsFullSizePosInMap(DESTROYER_SIZE))
-		{
-			if (((m_AttackPos.x + m_AttackPos.y) % DESTROYER_SIZE) != 0)
-			{
-				return false;
-			}
-		}
-		else
-		{
-			for (char i = 0; i < MAX_HORIZONTAL; ++i)
-			{
-				for (char j = 0; j < MAX_VERTICAL; ++j)
-				{
-					if (m_OtherPlayerMap->GetEachPosDataInMap(i, j) == MAP_NONE)
-					{
-						m_AttackPos.x = i;
-						m_AttackPos.y = j;
-					}
-				}
-			}
-			//m_AttackPos.x = rand() % MAX_HORIZONTAL;
-			//m_AttackPos.y = rand() % MAX_VERTICAL;
-		}
-	}
+
+	//srand((unsigned int)time(NULL));
+	//if (m_OtherRemainShipCheck[DESTROYER] == 0 &&
+	//	m_OtherRemainShipCheck[CRUISER] == 0 &&
+	//	m_OtherRemainShipCheck[BATTLESHIP] == 0)
+	//{
+	//	if (!IsFullSizePosInMap(AIRCRAFT_SIZE))
+	//	{
+	//		
+	//		if (((m_AttackPos.x + m_AttackPos.y) % AIRCRAFT_SIZE) != 0)
+	//		{
+	//			return false;
+	//		}
+	//	}
+	//	else
+	//	{
+	//	
+	//		/*for (char i = 0; i < MAX_HORIZONTAL; ++i)
+	//		{
+	//			for (char j = 0; j < MAX_VERTICAL; ++j)
+	//			{
+	//				if (m_OtherPlayerMap->GetEachPosDataInMap(i, j) == MAP_NONE)
+	//				{
+	//					m_AttackPos.x = i;
+	//					m_AttackPos.y = j;
+	//				}
+	//			}
+	//		}*/
+	//	}
+
+	//}
+	//else if (m_OtherRemainShipCheck[DESTROYER] == 0 &&
+	//		 m_OtherRemainShipCheck[CRUISER] == 0)
+	//{
+	//	if (!IsFullSizePosInMap(BATTLESHIP_SZIE))
+	//	{
+	//		if (((m_AttackPos.x + m_AttackPos.y) % BATTLESHIP_SZIE) != 0)
+	//		{
+	//			return false;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		for (char i = 0; i < MAX_HORIZONTAL; ++i)
+	//		{
+	//			for (char j = 0; j < MAX_VERTICAL; ++j)
+	//			{
+	//				if (m_OtherPlayerMap->GetEachPosDataInMap(i, j) == MAP_NONE)
+	//				{
+	//					m_AttackPos.x = i;
+	//					m_AttackPos.y = j;
+	//				}
+	//			}
+	//		}
+
+	//	}
+	//}
+	//else if (m_OtherRemainShipCheck[DESTROYER] == 0)
+	//{
+	//	if (!IsFullSizePosInMap(CRUISER_SIZE))
+	//	{
+	//		if (((m_AttackPos.x + m_AttackPos.y) % CRUISER_SIZE) != 0)
+	//		{
+	//			return false;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		for (char i = 0; i < MAX_HORIZONTAL; ++i)
+	//		{
+	//			for (char j = 0; j < MAX_VERTICAL; ++j)
+	//			{
+	//				if (m_OtherPlayerMap->GetEachPosDataInMap(i, j) == MAP_NONE)
+	//				{
+	//					m_AttackPos.x = i;
+	//					m_AttackPos.y = j;
+	//				}
+	//			}
+	//		}
+
+	//	}
+	//}
+	//else
+	//{
+	//	if (!IsFullSizePosInMap(DESTROYER_SIZE))
+	//	{
+	//		if (((m_AttackPos.x + m_AttackPos.y) % DESTROYER_SIZE) != 0)
+	//		{
+	//			return false;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		for (char i = 0; i < MAX_HORIZONTAL; ++i)
+	//		{
+	//			for (char j = 0; j < MAX_VERTICAL; ++j)
+	//			{
+	//				if (m_OtherPlayerMap->GetEachPosDataInMap(i, j) == MAP_NONE)
+	//				{
+	//					m_AttackPos.x = i;
+	//					m_AttackPos.y = j;
+	//				}
+	//			}
+	//		}
+
+	//	}
+	//}
 	
 
 	if (m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos) == MAP_NONE)
@@ -543,14 +544,16 @@ void Player::SetAttackedResult()
 	{
 		m_AttackedResult = MISS;
 	}*/
+	HitResult tmpHitResult;
 	m_AttackedResult = HIT_NONE;
 	
 	for (std::vector<Ship*>::size_type i = 0; i < m_ShipVector.size(); ++i)
 	{
+		tmpHitResult = m_ShipVector[i]->CheckAttack(m_PosAttackedFromOtherPlayer);
 		
-		if (m_ShipVector[i]->CheckAttack(m_PosAttackedFromOtherPlayer) != HIT_NONE)
+		if (tmpHitResult != HIT_NONE)
 		{
-			m_AttackedResult = m_ShipVector[i]->CheckAttack(m_PosAttackedFromOtherPlayer);
+			m_AttackedResult = tmpHitResult;
 			return;
 		}
 	}
@@ -738,6 +741,9 @@ void Player::InitAttacker()
 	//InitAttakPosArr();
 	InitAttackTurn();
 	InitGameMode();
+	//순서중요
+	InitPoidtMapToZero();
+	InitPointMap();
 }
 
 void Player::InitDefender()
@@ -1060,8 +1066,8 @@ bool Player::IsFullSizePosInMap(ShipSize inputSize)
 			{
 				if (m_OtherPlayerMap->GetEachPosDataInMap(i, j) == MAP_NONE)
 				{
-					m_AttackPos.x = i;
-					m_AttackPos.y = j;
+					/*m_AttackPos.x = i;
+					m_AttackPos.y = j;*/
 					return false;
 				}
 			}
@@ -1069,6 +1075,86 @@ bool Player::IsFullSizePosInMap(ShipSize inputSize)
 	}
 
 	return true;
+}
+
+void Player::InitPointMap()
+{
+	m_PointMap->SetEachPointInMap(2, 4, FIVE_POINT);
+	m_PointMap->SetEachPointInMap(3, 3, FIVE_POINT);
+	m_PointMap->SetEachPointInMap(4, 4, FIVE_POINT);
+	m_PointMap->SetEachPointInMap(1, 5, FOUR_POINT);
+	m_PointMap->SetEachPointInMap(3, 5, FOUR_POINT);
+	m_PointMap->SetEachPointInMap(5, 3, FOUR_POINT);
+	m_PointMap->SetEachPointInMap(4, 2, FOUR_POINT);
+	m_PointMap->SetEachPointInMap(2, 2, FOUR_POINT);
+	m_PointMap->SetEachPointInMap(1, 3, FOUR_POINT);
+	m_PointMap->SetEachPointInMap(2, 6, THREE_POINT);
+	m_PointMap->SetEachPointInMap(6, 6, THREE_POINT);
+	m_PointMap->SetEachPointInMap(6, 2, THREE_POINT);
+	m_PointMap->SetEachPointInMap(5, 1, THREE_POINT);
+	m_PointMap->SetEachPointInMap(3, 1, THREE_POINT);
+	m_PointMap->SetEachPointInMap(0, 4, THREE_POINT);
+	m_PointMap->SetEachPointInMap(0, 6, TWO_POINT);
+	m_PointMap->SetEachPointInMap(1, 7, TWO_POINT);
+	m_PointMap->SetEachPointInMap(5, 7, TWO_POINT);
+	m_PointMap->SetEachPointInMap(7, 5, TWO_POINT);
+	m_PointMap->SetEachPointInMap(7, 1, TWO_POINT);
+	m_PointMap->SetEachPointInMap(6, 0, TWO_POINT);
+	m_PointMap->SetEachPointInMap(0, 0, TWO_POINT);
+	m_PointMap->SetEachPointInMap(4, 0, TWO_POINT);
+
+
+}
+void Player::InitPoidtMapToZero()
+{
+	m_PointMap->InitMap();
+}
+
+void Player::SelectHighPoint()
+{
+	ShipPos tmpPos = { 0, };
+	MapState tmpPoint = ZERO_POINT;
+	MapState tmpPoint2 = ZERO_POINT;
+
+	for (char i = 0; i < MAX_HORIZONTAL; ++i)
+	{
+		for (char j = 0; j < MAX_VERTICAL; ++j)
+		{
+			tmpPoint2 = m_PointMap->GetEachPosDataInMap(i, j);
+
+			if (tmpPoint2 >= tmpPoint)
+			{
+				tmpPoint = tmpPoint2;
+				tmpPos.x = i;
+				tmpPos.y = j;
+			}
+
+		}
+	}
+
+	if (tmpPoint == ZERO_POINT)
+	{
+		for (char i = 0; i < MAX_HORIZONTAL; ++i)
+		{
+			for (char j = 0; j < MAX_VERTICAL; ++j)
+			{
+				if (m_OtherPlayerMap->GetEachPosDataInMap(i, j) == MAP_NONE)
+				{
+					m_AttackPos.x = i;
+					m_AttackPos.y = j;
+					return;
+				}
+			}
+		}
+	}
+	else
+	{
+		m_AttackPos = tmpPos;
+		m_PointMap->SetEachPointInMap(tmpPos, ZERO_POINT);
+	}
+
+	
+
 }
 
 
