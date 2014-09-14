@@ -76,7 +76,7 @@ void GameManager::PlayingGame()
 		{
 			m_AttackPosFromPlayer = m_Attacker->SelectPosToAttack();
 			m_Attacker->SetAttackPosArr();
-			system("cls");
+			//system("cls");
 			
 			m_Defender->SetAttackedPos(m_AttackPosFromPlayer);
 			m_Defender->SetAttackedPosArr(m_AttackPosFromPlayer, EachGameTurn);
@@ -88,11 +88,13 @@ void GameManager::PlayingGame()
 			m_Attacker->CheckRemainShip();
 			m_Defender->PrintShips();
 			HitResultPrint();
-			m_Attacker->PrintOtherPlayerMap();
+			//m_Attacker->PrintOtherPlayerMap();
 			m_Defender->PrintMap();
 			
 			
 			++EachGameTurn;
+
+			
 		}
 		totalTurnNum += EachGameTurn;
 		printf_s("this game turn %d\n", EachGameTurn);
@@ -105,7 +107,7 @@ void GameManager::PlayingGame()
 
 bool GameManager::IsGameEnd()
 {
-	return m_Defender->IsAllShipDestroyed();
+	return !(m_Defender->IsReMainShipInPlayerMap());
 }
 
 void GameManager::HitResultPrint()

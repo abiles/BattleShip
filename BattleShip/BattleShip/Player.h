@@ -35,11 +35,13 @@ public:
 	void		 InitAttakPosArr();
 	void		 InitHitResultArr();
 	void		 InitAttackTurn();
+	void		 InitGameMode();
 	void		 InitAttacker();
 
 	//¹æ¾î
 	void		 SetAttackedPos(ShipPos attackedPos);
 	void		 MakrAttackResultToPlayerMap(ShipPos attakedPos);
+	bool		 IsReMainShipInPlayerMap();
 	HitResult	 GetAttackedResult() const { return m_AttackedResult; }
 	void	     SetAttackedResult();
 	void		 SetAttackedPosArr(ShipPos attackedPos, int eachGameTurn);

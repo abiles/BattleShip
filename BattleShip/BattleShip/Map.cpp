@@ -51,10 +51,24 @@ void Map::PrintMapData()
 	
 	for (int i = 0; i < MAX_HORIZONTAL; ++i)
 	{
+		if (i == 0)
+		{
+			printf_s("  ");
+			for (int k = 0; k < MAX_VERTICAL; ++k)
+			{
+				printf_s("%d ", k);
+			}
+			printf_s("\n");
+		}
 		for (int j = 0; j < MAX_VERTICAL; ++j)
 		{
+			if (j == 0)
+			{
+				printf_s("%c ", 'a' + i);
+			}
 			printf_s("%d ", m_Map[i][j]);
 		}
+		
 		printf_s("\n");
 	}
 }

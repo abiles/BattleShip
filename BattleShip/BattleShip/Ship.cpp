@@ -229,6 +229,7 @@ void Ship::HitResultApply()
 
 void Ship::PrintShipPos()
 {
+	char tmpChar = 0;
 	printf_s("%s\t:\t", m_ShipName.c_str());
 
 	for (int i = 0; i < m_Size; ++i)
@@ -237,7 +238,8 @@ void Ship::PrintShipPos()
 		{
 			break;
 		}
-		printf_s("%d%d\t", m_Pos[i].x, m_Pos[i].y);
+		tmpChar = m_Pos[i].x + 'a';
+		printf_s("%c%d\t", tmpChar, m_Pos[i].y);
 	}
 
 	printf_s("\n");
