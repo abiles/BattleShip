@@ -144,5 +144,5 @@ void Map::MarkAttackResult(ShipPos attackedPos, MapState inputMapState)
 
 	//attack result에 따라서 위치에 표시만 하는거야돼 이전에 판단은 player에서 해서 와야지 
 
-
+	m_Map[attackedPos.x][attackedPos.y] = inputMapState;
 }
