@@ -27,6 +27,8 @@ public:
 	void		 SetAttackPosArr();
 	void		 MakrAttackResultToOtherPlayerMap();
 	void		 CheckRemainShip();
+	GameMode	 ModeSelect();
+	void		 SetPotentialTarget();
 	void		 InitAttackPos();
 	void		 InitOtherPlayerMap();
 	void		 InitRemainShip();
@@ -65,6 +67,7 @@ private:
 	ShipPos					m_AttackPosArr[MAX_HORIZONTAL*MAX_VERTICAL];
 	HitResult				m_HitResultArr[MAX_HORIZONTAL*MAX_VERTICAL];
 	int						m_AttackTurn;
+	std::vector<ShipPos*>	m_PotentialTargetVector;
 
 	//¹æ¾î
 	Map*					m_PlayerMap;

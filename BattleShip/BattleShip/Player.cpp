@@ -24,6 +24,7 @@ Player::Player()
 	m_AttackedPosFromOtherPlayerArr = new ShipPos[MAX_HORIZONTAL*MAX_VERTICAL];*/
 	//m_OtherRemainShipCheck = new int[SHIP_TYPE_END];
 	m_AttackTurn = -1;
+	m_PotentialTargetVector.reserve(MAX_DIRECTION);
 
 }
 
@@ -51,6 +52,22 @@ Player::~Player()
 		}
 	}
 
+	for (auto iterShip = m_PotentialTargetVector.begin();
+		iterShip != m_PotentialTargetVector.end();)
+	{
+		if ((*iterShip))
+		{
+			delete (*iterShip);
+			*iterShip = nullptr;
+			iterShip = m_PotentialTargetVector.erase(iterShip);
+		}
+		else
+		{
+			iterShip = m_PotentialTargetVector.erase(iterShip);
+		}
+	}
+
+	
 	m_ShipVector.clear();
 }
 
@@ -322,28 +339,29 @@ ShipPos Player::SelectPosToAttack()
 	srand((unsigned int)time(NULL));
 	
 	++m_AttackTurn;
+	m_GameMode = ModeSelect();
 
-	//switch (m_GameMode)
-	//{
-	//case HUNTMODE:
-	////랜덤으로 쏘기
-	//do
-	//{
-	//	m_AttackPos.x = rand() % MAX_HORIZONTAL;
-	//	m_AttackPos.y = rand() % MAX_VERTICAL;
+	switch (m_GameMode)
+	{
+	case HUNTMODE:
+	//랜덤으로 쏘기
+	do
+	{
+		m_AttackPos.x = rand() % MAX_HORIZONTAL;
+		m_AttackPos.y = rand() % MAX_VERTICAL;
 
-	//	
-	//} while (!SelectFineRandAttackPos());
-	//break;
-	//case TARGETMODE:
+		
+	} while (!SelectFineRandAttackPos());
+	break;
+	case TARGETMODE:
 
-	//break;
-	//default:
-	//break;
-	//}
+	break;
+	default:
+	break;
+	}
 
 
-	if (m_AttackPos.x == -1)
+	/*if (m_AttackPos.x == -1)
 	{
 		m_AttackPos.x = 0;
 	}
@@ -353,7 +371,7 @@ ShipPos Player::SelectPosToAttack()
 	{
 		++m_AttackPos.x;
 		m_AttackPos.y = 0;
-	}
+	}*/
 	
 
 	
@@ -684,6 +702,9 @@ void Player::MakrAttackResultToPlayerMap(ShipPos attackedPos)
 
 	case DESTROYER_DESTROY:
 	
+
+
+	//이부분은 추가할것이 있다. 
 	movePos.x = m_AttackPosArr[m_AttackTurn - 1].x - tmpAttackPos.x;
 	movePos.y = m_AttackPosArr[m_AttackTurn - 1].y - tmpAttackPos.y;
 
@@ -782,6 +803,69 @@ void Player::PrintOtherPlayerMap()
 	printf_s("\n");
 	printf_s("Attacker's Map\n");
 	m_OtherPlayerMap->PrintMapData();
+}
+
+GameMode Player::ModeSelect()
+{
+	GameMode tmpMode;
+	if (m_AttackedResultFromGM == HIT)
+	{
+		tmpMode = TARGETMODE;
+	}
+	else if (m_GameMode == TARGETMODE && m_AttackedResultFromGM == MISS)
+	{
+		tmpMode = TARGETMODE;
+	}
+	else
+	{
+		tmpMode = HUNTMODE;
+	}
+
+	return tmpMode;
+
+}
+
+void Player::SetPotentialTarget()
+{
+	
+
+	if (m_AttackPos.y-1 >= VERTICAL_ZERO &&
+		m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos.x, m_AttackPos.y-1) == MAP_NONE)
+	{
+		ShipPos tmpPos;
+		tmpPos.x = m_AttackPos.x;
+		tmpPos.y = m_AttackPos.y-1;
+		m_PotentialTargetVector.push_back(&tmpPos);
+	}
+
+	if (m_AttackPos.x +1 < MAX_HORIZONTAL &&
+		m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos.x +1, m_AttackPos.y - 1) == MAP_NONE)
+	{
+		ShipPos tmpPos;
+		tmpPos.x = m_AttackPos.x+1;
+		tmpPos.y = m_AttackPos.y;
+		m_PotentialTargetVector.push_back(&tmpPos);
+	}
+
+	if (m_AttackPos.y+1 < MAX_VERTICAL &&
+		m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos.x + 1, m_AttackPos.y +1) == MAP_NONE)
+	{
+		ShipPos tmpPos;
+		tmpPos.x = m_AttackPos.x;
+		tmpPos.y = m_AttackPos.y+1;
+		m_PotentialTargetVector.push_back(&tmpPos);
+	}
+
+	if (m_AttackPos.x -1 >= HORIZONTAL_ZERO &&
+		m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos.x - 1, m_AttackPos.y - 1) == MAP_NONE)
+	{
+		ShipPos tmpPos;
+		tmpPos.x = m_AttackPos.x - 1;
+		tmpPos.y = m_AttackPos.y;
+		m_PotentialTargetVector.push_back(&tmpPos);
+	}
+
+	
 }
 
 
