@@ -10,7 +10,7 @@ enum GameMode
 
 enum GameNum
 {
-	GAMENUM = 10 ,
+	GAMENUM = 11,
 };
 
 

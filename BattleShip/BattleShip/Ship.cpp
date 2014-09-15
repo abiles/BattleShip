@@ -67,7 +67,7 @@ void Ship::MakeDir()
 	m_ShipDir[NORTH]		  = { 0, -1 };
 	m_ShipDir[EAST]			  = { 1,  0 };
 	m_ShipDir[SOUTH]		  = { 0,  1 };
-	m_ShipDir[WEST]			  = { 1,  0 };
+	m_ShipDir[WEST]			  = {-1,  0 };
 	
 }
 

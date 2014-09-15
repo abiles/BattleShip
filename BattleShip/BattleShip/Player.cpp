@@ -76,7 +76,7 @@ Player::~Player()
 
 void Player::RandomAssignShips()
 {
-	srand((unsigned int)time(NULL));
+	
 
 
 	int shipIdx = 0;
@@ -339,7 +339,7 @@ void Player::ValidPosSetToMap(ShipPos inputShipPos, ShipDirection inputDir, int 
 
 ShipPos Player::SelectPosToAttack()
 {
-	srand((unsigned int)time(NULL));
+	
 
 	++m_AttackTurn;
 
@@ -396,7 +396,7 @@ bool Player::SelectFineAttackPos()
 {
 
 
-	//srand((unsigned int)time(NULL));
+
 	//if (m_OtherRemainShipCheck[DESTROYER] == 0 &&
 	//	m_OtherRemainShipCheck[CRUISER] == 0 &&
 	//	m_OtherRemainShipCheck[BATTLESHIP] == 0)
@@ -1184,6 +1184,78 @@ void Player::PointWeightPlus(ShipPos inputShipPos, int point)
 	}
 
 	m_PointMap->PointPlusInintMap(inputShipPos, point);
+}
+
+void Player::EdgeFixedAssignShips()
+{
+	int shipIdx = 0;
+	ShipPos startPos = { 0, };
+	
+	startPos.x = 0;
+	startPos.y = 1;
+	ValidPosLauchToShip(startPos, SOUTH, shipIdx);
+	ValidPosSetToMap(startPos, SOUTH, shipIdx);
+	++shipIdx;
+
+	startPos.x = 0;
+	startPos.y = 7;
+	ValidPosLauchToShip(startPos, EAST, shipIdx);
+	ValidPosSetToMap(startPos, EAST, shipIdx);
+	++shipIdx;
+
+	startPos.x = 7;
+	startPos.y = 7;
+	ValidPosLauchToShip(startPos, NORTH, shipIdx);
+	ValidPosSetToMap(startPos, NORTH, shipIdx);
+	++shipIdx;
+
+	startPos.x = 7;
+	startPos.y = 0;
+	ValidPosLauchToShip(startPos, WEST, shipIdx);
+	ValidPosSetToMap(startPos, WEST, shipIdx);
+	++shipIdx;
+
+	startPos.x = 3;
+	startPos.y = 0;
+	ValidPosLauchToShip(startPos, WEST, shipIdx);
+	ValidPosSetToMap(startPos, WEST, shipIdx);
+	++shipIdx;
+}
+
+void Player::EdgeFixedAssignShipsSecond()
+{
+	int shipIdx = 0;
+	ShipPos startPos = { 0, };
+
+	startPos.x = 7;
+	startPos.y = 1;
+	ValidPosLauchToShip(startPos, SOUTH, shipIdx);
+	ValidPosSetToMap(startPos, SOUTH, shipIdx);
+	++shipIdx;
+
+	startPos.x = 0;
+	startPos.y = 0;
+	ValidPosLauchToShip(startPos, EAST, shipIdx);
+	ValidPosSetToMap(startPos, EAST, shipIdx);
+	++shipIdx;
+
+	startPos.x = 4;
+	startPos.y = 7;
+	ValidPosLauchToShip(startPos, NORTH, shipIdx);
+	ValidPosSetToMap(startPos, NORTH, shipIdx);
+	++shipIdx;
+
+	startPos.x = 0;
+	startPos.y = 5;
+	ValidPosLauchToShip(startPos, SOUTH, shipIdx);
+	ValidPosSetToMap(startPos, SOUTH, shipIdx);
+	++shipIdx;
+
+	startPos.x = 5;
+	startPos.y = 0;
+	ValidPosLauchToShip(startPos, WEST, shipIdx);
+	ValidPosSetToMap(startPos, WEST, shipIdx);
+	++shipIdx;
 }
 
 //ShipPos Player::SelectPosWithoutRand()

@@ -19,6 +19,8 @@ public:
 	bool		 IsOtherShipOverlap(ShipPos inputShipPos, ShipDirection inputDir, int shipIdx);
 	void		 ValidPosLauchToShip(ShipPos inputShipPos, ShipDirection inputDir, int shipIdx);
 	void		 ValidPosSetToMap(ShipPos inputShipPos, ShipDirection inputDir, int shipIdx);
+	void		 EdgeFixedAssignShips();
+	void		 EdgeFixedAssignShipsSecond();
 
 	//АјАн
 	ShipPos		 SelectPosToAttack();

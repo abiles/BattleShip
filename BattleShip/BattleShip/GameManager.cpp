@@ -71,7 +71,22 @@ void GameManager::PlayingGame()
 	{
 		m_Attacker->InitAttacker();
 		m_Defender->InitDefender();
-		m_Defender->RandomAssignShips();
+		if (i >= 0 && i < 3)
+		{
+			m_Defender->EdgeFixedAssignShips();
+		}
+		else if (i >= 3 && i< 7)
+		{
+			m_Defender->RandomAssignShips();
+		}
+		else if (i >= 7 && i<10)
+		{
+			m_Defender->EdgeFixedAssignShipsSecond();
+		}
+		else
+		{
+			m_Defender->RandomAssignShips();
+		}
 		
 
 		while (!IsGameEnd())
