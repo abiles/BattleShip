@@ -1107,20 +1107,20 @@ void Player::InitPointMap()
 }
 void Player::InitPoidtMapToZero()
 {
-	m_PointMap->InitMap();
+	m_PointMap->InitIntMap();
 }
 
 void Player::SelectHighPoint()
 {
 	ShipPos tmpPos = { 0, };
-	MapState tmpPoint = ZERO_POINT;
-	MapState tmpPoint2 = ZERO_POINT;
+	int tmpPoint = ZERO_POINT;
+	int tmpPoint2 = ZERO_POINT;
 
 	for (char i = 0; i < MAX_HORIZONTAL; ++i)
 	{
 		for (char j = 0; j < MAX_VERTICAL; ++j)
 		{
-			tmpPoint2 = m_PointMap->GetEachPosDataInMap(i, j);
+			tmpPoint2 = m_PointMap->GetIntDataInMap(i, j);
 
 			if (tmpPoint2 >= tmpPoint)
 			{
@@ -1156,5 +1156,10 @@ void Player::SelectHighPoint()
 	
 
 }
+
+//ShipPos Player::SelectPosWithoutRand()
+//{
+//
+//}
 
 

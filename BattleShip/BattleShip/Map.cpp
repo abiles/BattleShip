@@ -5,12 +5,14 @@
 Map::Map()
 {
 	MakeMap();
+	MakeIntMap();
 }
 
 
 Map::~Map()
 {
 	DeleteMap();
+	DeleteIntMap();
 }
 
 
@@ -40,7 +42,7 @@ void Map::InitMap()
 
 	for (int i = 0; i < MAX_HORIZONTAL; ++i)
 	{
-		memset(m_Map[i], MAP_NONE, sizeof(int)*MAX_VERTICAL);
+		memset(m_Map[i], MAP_NONE, sizeof(MapState)*MAX_VERTICAL);
 	}
 	return;
 }
@@ -187,7 +189,7 @@ void Map::MarkAttackResult(ShipPos attackedPos, MapState inputMapState)
 	m_Map[attackedPos.x][attackedPos.y] = inputMapState;
 }
 
-void Map::SetEachPointInMap(ShipPos inputShipPos, MapState point)
+void Map::SetEachPointInMap(ShipPos inputShipPos, int point)
 {
 	_ASSERT(inputShipPos.x < MAX_HORIZONTAL &&
 		inputShipPos.x >= HORIZONTAL_ZERO);
@@ -205,58 +207,120 @@ void Map::SetEachPointInMap(ShipPos inputShipPos, MapState point)
 	{
 		return;
 	}
-	if (!(point >= ZERO_POINT && point <= FIVE_POINT))
-	{
-		return;
-	}
+	
 
-	m_Map[inputShipPos.x][inputShipPos.y] = point;
+	m_IntMap[inputShipPos.x][inputShipPos.y] = point;
 
 
 
 }
 
-void Map::SetEachPointInMap(char x, char y, MapState point)
+void Map::SetEachPointInMap(char _x, char _y, int point)
 {
+
+	_ASSERT(_x < MAX_HORIZONTAL && _x >= HORIZONTAL_ZERO);
+	_ASSERT(_y < MAX_VERTICAL && _y >= VERTICAL_ZERO);
+
+	if (!(_x < MAX_HORIZONTAL && _x >= HORIZONTAL_ZERO) ||
+		!(_y < MAX_VERTICAL && _y >= VERTICAL_ZERO))
+	{
+		return;
+	}
 	ShipPos tmpShip;
-	tmpShip.x = x;
-	tmpShip.y = y;
+	tmpShip.x = _x;
+	tmpShip.y = _y;
 
 	SetEachPointInMap(tmpShip, point);
 }
 
-//void Map::PointPlusInMap(ShipPos inputShipPos, MapState point)
-//{
-//	_ASSERT(inputShipPos.x < MAX_HORIZONTAL &&
-//		inputShipPos.x >= HORIZONTAL_ZERO);
-//	_ASSERT(inputShipPos.y < MAX_VERTICAL &&
-//		inputShipPos.y >= VERTICAL_ZERO);
-//	_ASSERT(point >= ZERO_POINT && point <= FIVE_POINT);
-//
-//	if (!(inputShipPos.x < MAX_HORIZONTAL &&
-//		inputShipPos.x >= HORIZONTAL_ZERO))
-//	{
-//		return;
-//	}
-//	if (!(inputShipPos.y < MAX_VERTICAL &&
-//		inputShipPos.y >= VERTICAL_ZERO))
-//	{
-//		return;
-//	}
-//	if (!(point >= ZERO_POINT && point <= FIVE_POINT))
-//	{
-//		return;
-//	}
-//	
-//	MapState tmpState;
-//
-//	if (point == SIX_POINT)
-//	{
-//		return;
-//	}
-//	else
-//	{
-//		m_Map[inputShipPos.x][inputShipPos.y];
-//	
-//	}
-//}
+void Map::MakeIntMap()
+{
+	m_IntMap = new int*[MAX_HORIZONTAL];
+
+	for (int i = 0; i < MAX_HORIZONTAL; ++i)
+	{
+		m_IntMap[i] = new int[MAX_VERTICAL];
+	}
+	return;
+}
+
+void Map::DeleteIntMap()
+{
+	for (int i = 0; i < MAX_HORIZONTAL; ++i)
+	{
+		delete[] m_IntMap[i];
+	}
+
+	delete[] m_IntMap;
+}
+
+void Map::InitIntMap()
+{
+	for (int i = 0; i < MAX_HORIZONTAL; ++i)
+	{
+		memset(m_Map[i], MAP_NONE, sizeof(int)*MAX_VERTICAL);
+	}
+	return;
+}
+
+int Map::GetIntDataInMap(ShipPos inputShipPos)
+{
+
+	_ASSERT(inputShipPos.x < MAX_HORIZONTAL &&
+		inputShipPos.x >= HORIZONTAL_ZERO);
+	_ASSERT(inputShipPos.y < MAX_VERTICAL &&
+		inputShipPos.y >= VERTICAL_ZERO);
+
+	if (!(inputShipPos.x < MAX_HORIZONTAL &&
+		inputShipPos.x >= HORIZONTAL_ZERO))
+	{
+		return MAP_NONE;
+	}
+	if (!(inputShipPos.y < MAX_VERTICAL &&
+		inputShipPos.y >= VERTICAL_ZERO))
+	{
+		return MAP_NONE;
+	}
+
+	int tmpData = m_Map[inputShipPos.x][inputShipPos.y];
+
+	return tmpData;
+	
+}
+
+int Map::GetIntDataInMap(char _x, char _y)
+{
+	_ASSERT(_x < MAX_HORIZONTAL && _x >= HORIZONTAL_ZERO);
+	_ASSERT(_y < MAX_VERTICAL && _y >= VERTICAL_ZERO);
+
+	if (!(_x < MAX_HORIZONTAL && _x >= HORIZONTAL_ZERO) || !(_y < MAX_VERTICAL && _y >= VERTICAL_ZERO))
+	{
+		return MAP_NONE;
+	}
+
+	int tmpData = m_IntMap[_x][_y];
+	return tmpData;
+}
+
+void Map::PointPlusInintMap(ShipPos inputShipPos, int point)
+{
+	_ASSERT(inputShipPos.x < MAX_HORIZONTAL &&
+		inputShipPos.x >= HORIZONTAL_ZERO);
+	_ASSERT(inputShipPos.y < MAX_VERTICAL &&
+		inputShipPos.y >= VERTICAL_ZERO);
+	_ASSERT(point >= ZERO_POINT && point <= FIVE_POINT);
+
+	if (!(inputShipPos.x < MAX_HORIZONTAL &&
+		inputShipPos.x >= HORIZONTAL_ZERO))
+	{
+		return;
+	}
+	if (!(inputShipPos.y < MAX_VERTICAL &&
+		inputShipPos.y >= VERTICAL_ZERO))
+	{
+		return;
+	}
+	
+	m_IntMap[inputShipPos.x][inputShipPos.y] += point;
+
+}

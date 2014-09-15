@@ -28,6 +28,7 @@ public:
 	void		 MakrAttackResultToOtherPlayerMap();
 	void		 CheckRemainShip();
 	GameMode	 ModeSelect();
+	ShipPos		 SelectPosWithoutRand();
 	void		 SetPotentialTarget();
 	void		 SelectHighPoint();
 	bool		 IsFullSizePosInMap(ShipSize inputSize);

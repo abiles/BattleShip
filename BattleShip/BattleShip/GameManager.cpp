@@ -94,10 +94,7 @@ void GameManager::PlayingGame()
 			m_Attacker->PrintOtherPlayerMap();
 			m_Defender->PrintMap();
 			
-			
 			++EachGameTurn;
-
-			
 			
 		}
 		

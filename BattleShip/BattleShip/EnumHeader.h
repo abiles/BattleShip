@@ -10,7 +10,7 @@ enum GameMode
 
 enum GameNum
 {
-	GAMENUM = 10,
+	GAMENUM = 2,
 };
 
 
@@ -34,14 +34,11 @@ enum MapState
 	SHIP_ATTACEKED,
 	MISSED_ATTACK,
 	SHIP_DESTROYED,
-	ZERO_POINT = 0,
-	ONE_POINT = 1,
-	TWO_POINT = 2 ,
-	THREE_POINT = 3,
-	FOUR_POINT = 4,
-	FIVE_POINT = 5,
-	SIX_POINT = 6,
+
+	
 };
+
+
 
 
 enum MapSize
@@ -57,6 +54,17 @@ enum OverLapCheck
 	WRONGINPUT = -1,
 	OVERLAP = 0,
 	OVERLAP_NONE = 1,
+};
+
+enum PointLevel
+{
+	ZERO_POINT = 0,
+	ONE_POINT = 10,
+	TWO_POINT = 20,
+	THREE_POINT = 30,
+	FOUR_POINT = 40,
+	FIVE_POINT = 50,
+	SIX_POINT = 60,
 };
 
 enum ShipDirection
