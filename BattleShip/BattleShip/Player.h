@@ -22,7 +22,7 @@ public:
 
 	//АјАн
 	ShipPos		 SelectPosToAttack();
-	bool		 SelectFineRandAttackPos();
+	bool		 SelectFineAttackPos();
 	void		 SetAttackedResultFromGM(HitResult inputHitResult);
 	void		 SetAttackPosArr();
 	void		 MakrAttackResultToOtherPlayerMap();
@@ -31,6 +31,7 @@ public:
 	ShipPos		 SelectPosWithoutRand();
 	void		 SetPotentialTarget();
 	void		 SelectHighPoint();
+	void		 PointWeightPlus(ShipPos inputShipPos, int point);
 	bool		 IsFullSizePosInMap(ShipSize inputSize);
 	void		 InitAttackPos();
 	void		 InitOtherPlayerMap();

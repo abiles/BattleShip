@@ -78,21 +78,23 @@ void GameManager::PlayingGame()
 		{
 			//m_Defender->PrintMap();
 			m_AttackPosFromPlayer = m_Attacker->SelectPosToAttack();
+			
 			//m_Attacker->SetAttackPosArr();
 			
 			m_Defender->SetAttackedPos(m_AttackPosFromPlayer);
 			//m_Defender->SetAttackedPosArr(m_AttackPosFromPlayer, EachGameTurn);
 			m_Defender->SetAttackedResult();
-			system("cls");
+			//system("cls");
+			//printf_s("%c %c", m_AttackPosFromPlayer.x + 'a', m_AttackPosFromPlayer.y+'0');
 			m_Defender->MakrAttackResultToPlayerMap(m_AttackPosFromPlayer);
 			m_AttackedResultFromDef = m_Defender->GetAttackedResult();
 			m_Attacker->SetAttackedResultFromGM(m_AttackedResultFromDef);
 			m_Attacker->MakrAttackResultToOtherPlayerMap();
 			m_Attacker->CheckRemainShip();
 			//m_Defender->PrintShips();
-			HitResultPrint();
-			m_Attacker->PrintOtherPlayerMap();
-			m_Defender->PrintMap();
+			//HitResultPrint();
+			//m_Attacker->PrintOtherPlayerMap();
+			//m_Defender->PrintMap();
 			
 			++EachGameTurn;
 			

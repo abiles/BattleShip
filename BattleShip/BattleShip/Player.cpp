@@ -354,7 +354,7 @@ ShipPos Player::SelectPosToAttack()
 	do 
 	{
 		SelectHighPoint();
-	} while (!SelectFineRandAttackPos());
+	} while (!SelectFineAttackPos());
 
 	break;
 	case TARGETMODE:
@@ -363,12 +363,18 @@ ShipPos Player::SelectPosToAttack()
 		SetPotentialTarget();
 	}
 
-	if (!(m_PotentialTargetStack.empty()))
+	
+	while (!(m_PotentialTargetStack.empty()) && !SelectFineAttackPos())
 	{
 		m_AttackPos = m_PotentialTargetStack.top();
 		m_PotentialTargetStack.pop();
+
 	}
-	else
+
+	//마지막에 있는게 딱 나왔다. 그럼 엠티잖아. 새롭게 할당할 수 는 없지
+	// 그 스택에 쌓여있던걸 써야되는 거야. 
+	
+	if (m_PotentialTargetStack.empty() && !SelectFineAttackPos())
 	{
 		m_GameMode = HUNTMODE;
 		do
@@ -376,7 +382,7 @@ ShipPos Player::SelectPosToAttack()
 			SelectHighPoint();
 			/*m_AttackPos.x = rand() % MAX_HORIZONTAL;
 			m_AttackPos.y = rand() % MAX_VERTICAL;*/
-		} while (!SelectFineRandAttackPos());
+		} while (!SelectFineAttackPos());
 	}
 	break;
 	default:
@@ -386,7 +392,7 @@ ShipPos Player::SelectPosToAttack()
 	return m_AttackPos;
 }
 
-bool Player::SelectFineRandAttackPos()
+bool Player::SelectFineAttackPos()
 {
 
 
@@ -1155,6 +1161,29 @@ void Player::SelectHighPoint()
 
 	
 
+}
+
+void Player::PointWeightPlus(ShipPos inputShipPos, int point)
+{
+
+	_ASSERT(inputShipPos.x < MAX_HORIZONTAL &&
+		inputShipPos.x >= HORIZONTAL_ZERO);
+	_ASSERT(inputShipPos.y < MAX_VERTICAL &&
+		inputShipPos.y >= VERTICAL_ZERO);
+	_ASSERT(point >= ZERO_POINT && point <= FIVE_POINT);
+
+	if (!(inputShipPos.x < MAX_HORIZONTAL &&
+		inputShipPos.x >= HORIZONTAL_ZERO))
+	{
+		return;
+	}
+	if (!(inputShipPos.y < MAX_VERTICAL &&
+		inputShipPos.y >= VERTICAL_ZERO))
+	{
+		return;
+	}
+
+	m_PointMap->PointPlusInintMap(inputShipPos, point);
 }
 
 //ShipPos Player::SelectPosWithoutRand()
