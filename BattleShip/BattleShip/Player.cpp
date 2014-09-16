@@ -19,6 +19,7 @@ Player::Player()
 	m_ShipVector.push_back(new Cruiser());
 	m_ShipVector.push_back(new Destroyer());
 	m_ShipVector.push_back(new Destroyer());
+	memset(m_NetworkMap, 0, sizeof(char)*(MAX_HORIZONTAL*MAX_VERTICAL));
 	//m_GameMode = HUNTMODE;
 	/*m_HitResultArr = new HitResult[MAX_HORIZONTAL*MAX_VERTICAL];
 	m_AttackPosArr = new ShipPos[MAX_HORIZONTAL*MAX_VERTICAL];
@@ -91,6 +92,7 @@ void Player::RandomAssignShips()
 
 		if (IsValidPos(StartPos, direction, shipIdx))
 		{
+			
 			ValidPosLauchToShip(StartPos, direction, shipIdx);
 			ValidPosSetToMap(StartPos, direction, shipIdx);
 			shipIdx++;
@@ -294,9 +296,15 @@ void Player::ValidPosLauchToShip(ShipPos inputShipPos, ShipDirection inputDir, i
 		return;
 	}
 
+	
+
 	for (int i = 0; i < m_ShipVector[shipIdx]->GetSize(); ++i)
 	{
 		m_ShipVector[shipIdx]->AddPos(inputShipPos, i);
+		//네트워크를 위해서 
+		m_NetworkMap[inputShipPos.x*MAX_VERTICAL + inputShipPos.y] =
+			(char)m_ShipVector[shipIdx]->GetShipType();
+		//
 		inputShipPos.x += m_ShipVector[shipIdx]->GetDirPos(inputDir).x;
 		inputShipPos.y += m_ShipVector[shipIdx]->GetDirPos(inputDir).y;
 	}
@@ -695,7 +703,8 @@ void Player::PrintMap()
 {
 	printf_s("\n");
 	printf_s("\t\t\t\t");
-	printf_s("Defender's Map\n");
+	printf_s("My Map\n");
+	//printf_s("Defender's Map\n");
 	m_PlayerMap->PrintMapData();
 }
 
@@ -954,7 +963,8 @@ void Player::PrintOtherPlayerMap()
 {
 	printf_s("\n");
 	printf_s("\t\t\t\t");
-	printf_s("Attacker's Map\n");
+	printf_s("Enemy Map\n");
+	//printf_s("Attacker's Map\n");
 	m_OtherPlayerMap->PrintMapData();
 }
 
@@ -1255,12 +1265,38 @@ void Player::EdgeFixedAssignShipsSecond()
 	startPos.y = 0;
 	ValidPosLauchToShip(startPos, WEST, shipIdx);
 	ValidPosSetToMap(startPos, WEST, shipIdx);
-	++shipIdx;
+	++shipIdx; 
 }
 
-//ShipPos Player::SelectPosWithoutRand()
-//{
-//
-//}
+void Player::InitPlayer()
+{
+	InitDefender();
+	InitAttacker();
+	memset(m_NetworkMap, 0, sizeof(char)*(MAX_HORIZONTAL*MAX_VERTICAL));
+}
+
+void Player::SetNetworAttackedResult(HitResult inputResult)
+{
+	m_AttackedResult = inputResult;
+
+}
+
+ShipData Player::ParseAssignShip()
+{
+	ShipData shipData;
+	Coord tmpCoord;
+
+	for (unsigned int i = 0; i < m_ShipVector.size(); ++i)
+	{
+		for (int j = 0; j < m_ShipVector[i]->GetSize(); ++j)
+		{
+			tmpCoord.mX = m_ShipVector[i]->GetPos(j).x;
+			tmpCoord.mY = m_ShipVector[i]->GetPos(j).y;
+			shipData.SetShipCoord((ShipData::ShipType)(i + 1), j, tmpCoord);
+		}
+	}
+
+	return shipData;
+}
 
 

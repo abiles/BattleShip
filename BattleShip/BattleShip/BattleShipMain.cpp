@@ -11,7 +11,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	GameManager GM;
 
-	GM.PlayingGame();
+	GM.NetworkGamePlaying();
+	//GM.PlayingGame();
 
 	getchar();
 	return 0;

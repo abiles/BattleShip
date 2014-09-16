@@ -18,11 +18,11 @@ Map::~Map()
 
 void Map::MakeMap()
 {
-	m_Map = new MapState*[MAX_HORIZONTAL];
+	m_Map = new char*[MAX_HORIZONTAL];
 
 	for (int i = 0; i < MAX_HORIZONTAL; ++i)
 	{
-		m_Map[i] = new MapState[MAX_VERTICAL];
+		m_Map[i] = new char[MAX_VERTICAL];
 	}
 	return;
 }
@@ -42,7 +42,7 @@ void Map::InitMap()
 
 	for (int i = 0; i < MAX_HORIZONTAL; ++i)
 	{
-		memset(m_Map[i], MAP_NONE, sizeof(MapState)*MAX_VERTICAL);
+		memset(m_Map[i], MAP_NONE, sizeof(char)*MAX_VERTICAL);
 	}
 	return;
 }
@@ -101,7 +101,7 @@ void Map::PrintMapData()
 	}
 }
 
-MapState Map::GetEachPosDataInMap(ShipPos inputShipPos)
+char Map::GetEachPosDataInMap(ShipPos inputShipPos)
 {
 	_ASSERT(inputShipPos.x  <  MAX_HORIZONTAL &&
 			inputShipPos.x  >= HORIZONTAL_ZERO);
@@ -119,12 +119,12 @@ MapState Map::GetEachPosDataInMap(ShipPos inputShipPos)
 		return MAP_NONE;
 	}
 
-	MapState tmpData = m_Map[inputShipPos.x][inputShipPos.y];
+	char tmpData = m_Map[inputShipPos.x][inputShipPos.y];
 
 	return tmpData;
 }
 
-MapState Map::GetEachPosDataInMap(char _x, char _y)
+char Map::GetEachPosDataInMap(char _x, char _y)
 {
 	_ASSERT(_x < MAX_HORIZONTAL && _x >= HORIZONTAL_ZERO);
 	_ASSERT(_y < MAX_VERTICAL && _y >= VERTICAL_ZERO);
@@ -134,7 +134,7 @@ MapState Map::GetEachPosDataInMap(char _x, char _y)
 		return MAP_NONE;
 	}
 
-	MapState tmpData = m_Map[_x][_y];
+	char tmpData = m_Map[_x][_y];
 	return tmpData;
 
 }

@@ -26,6 +26,7 @@ public:
 	ShipPos		 SelectPosToAttack();
 	bool		 SelectFineAttackPos();
 	void		 SetAttackedResultFromGM(HitResult inputHitResult);
+	ShipPos		 GetAttackPos() const { return m_AttackPos; }
 	void		 SetAttackPosArr();
 	void		 MakrAttackResultToOtherPlayerMap();
 	void		 CheckRemainShip();
@@ -53,6 +54,7 @@ public:
 	bool		 IsReMainShipInPlayerMap();
 	HitResult	 GetAttackedResult() const { return m_AttackedResult; }
 	void	     SetAttackedResult();
+	void		 SetNetworAttackedResult(HitResult inputResult);
 	void		 SetAttackedPosArr(ShipPos attackedPos, int eachGameTurn);
 	bool		 IsAllShipDestroyed();
 	void		 InitAttackedResult();
@@ -69,6 +71,13 @@ public:
 	void		 PrintMap();
 	void		 PrintOtherPlayerMap();
 
+	//플레이어
+	void		 InitPlayer();
+	char*		 GetNetworkMap(){ return m_NetworkMap; }
+	ShipData	 ParseAssignShip();
+	
+
+
 private:
 	//공격
 	ShipPos					m_AttackPos;
@@ -79,6 +88,7 @@ private:
 	ShipPos					m_AttackPosArr[MAX_HORIZONTAL*MAX_VERTICAL];
 	HitResult				m_HitResultArr[MAX_HORIZONTAL*MAX_VERTICAL];
 	int						m_AttackTurn;
+	std::vector<Ship*>		m_ShipVector;
 	//std::vector<ShipPos*>	m_PotentialTargetVector;
 	std::stack<ShipPos>		m_PotentialTargetStack;
 	bool					m_PotentialTargetSetCheck;
@@ -88,9 +98,12 @@ private:
 	Map*					m_PlayerMap;
 	ShipPos					m_PosAttackedFromOtherPlayer;
 	ShipPos					m_AttackedPosFromOtherPlayerArr[MAX_HORIZONTAL*MAX_VERTICAL];
-	std::vector<Ship*>		m_ShipVector;
+	
 	HitResult				m_AttackedResult;
 
+	//플레이어
+	char					m_NetworkMap[MAX_HORIZONTAL*MAX_VERTICAL];
+	ShipPos					m_AttackPosFromNet;
 };
 
 

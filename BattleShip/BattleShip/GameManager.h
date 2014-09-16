@@ -17,14 +17,22 @@ public:
 	void		InitAttackPosFromPlayer();
 	void		InitAttackResultFromPlayer();
 	void		PlayingGame();
+	void		NetworkGamePlaying();
 	bool		IsGameEnd();
 	void		HitResultPrint();
+
+	//network
+	char*		NetworkAttackResultPrint(HitResult inputResult);
+	
 private:
 
 	Player*		m_Attacker;
 	Player*		m_Defender;
+	Player*     m_Player;
 
 	ShipPos		m_AttackPosFromPlayer;
 	HitResult	m_AttackedResultFromDef;
 };
+
+
 
