@@ -20,6 +20,8 @@ Player::Player()
 	m_ShipVector.push_back(new Destroyer());
 	m_ShipVector.push_back(new Destroyer());
 	memset(m_NetworkMap, 0, sizeof(char)*(MAX_HORIZONTAL*MAX_VERTICAL));
+	m_StartAttackPos = { -1 };
+	m_AttackPosArr[2] = { -1, };
 	//m_GameMode = HUNTMODE;
 	/*m_HitResultArr = new HitResult[MAX_HORIZONTAL*MAX_VERTICAL];
 	m_AttackPosArr = new ShipPos[MAX_HORIZONTAL*MAX_VERTICAL];
@@ -510,7 +512,14 @@ bool Player::SelectFineAttackPos()
 
 	//	}
 	//}
-	
+
+
+	if (m_AttackPos.x >= MAX_HORIZONTAL || m_AttackPos.x < ZERO_POINT ||
+		m_AttackPos.y >= MAX_VERTICAL || m_AttackPos.y < ZERO_POINT)
+	{
+		return false;
+	}
+
 
 	if (m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos) == MAP_NONE)
 	{
@@ -750,7 +759,7 @@ void Player::InitAttacker()
 {
 	InitAttackPos();
 	InitAttackResultFromGM();
-	InitOtherPlayerMap();
+	//InitOtherPlayerMap();
 	InitRemainShip();
 	//InitHitResultArr();
 	//InitAttakPosArr();
@@ -1297,6 +1306,114 @@ ShipData Player::ParseAssignShip()
 	}
 
 	return shipData;
+}
+
+ShipPos Player::ChooseAttackPos()
+{
+	static int firstTargetMode = 1;
+	static char dirX = 0;
+	static char dirY = 0;
+	++m_AttackTurn;
+
+	if (m_AttackedResultFromGM == HIT)
+	{
+		m_GameMode = TARGETMODE;
+	}
+
+	switch (m_GameMode)
+	{
+	case HUNTMODE:
+	do
+	{
+		ChooseRandPosWithPairity();
+	} while (!SelectFineAttackPos());
+
+	break;
+	case TARGETMODE:
+	if (firstTargetMode == 1)
+	{
+		SetPotentialTarget();
+		if (!(m_PotentialTargetStack.empty()))
+		{
+			m_StartAttackPos = m_AttackPos;
+			m_AttackPosArr[0] = m_StartAttackPos;
+			m_AttackPos = m_PotentialTargetStack.top();
+			m_PotentialTargetStack.pop();
+		}
+		firstTargetMode = 0;
+	}
+	else if (m_AttackedResultFromGM == HIT)
+	{
+		if (m_AttackPosArr[1].x == -1)
+		{
+			m_AttackPosArr[1] = m_AttackPos;
+
+		}
+		else
+		{
+			m_AttackPosArr[0] = m_AttackPosArr[1];
+			m_AttackPosArr[1] = m_AttackPos;
+		}
+
+		
+		m_AttackPos.x += m_AttackPosArr[1].x - m_AttackPosArr[0].x;
+		m_AttackPos.y += m_AttackPosArr[1].y - m_AttackPosArr[0].y;
+
+		if (!SelectFineAttackPos())
+		{
+			if (!(m_PotentialTargetStack.empty()))
+			{
+				m_AttackPos = m_PotentialTargetStack.top();
+				m_PotentialTargetStack.pop();
+			}
+		}
+	}
+	else
+	{
+		if (!(m_PotentialTargetStack.empty()))
+		{
+			m_AttackPos = m_PotentialTargetStack.top();
+			m_PotentialTargetStack.pop();
+		}
+	}
+
+
+
+	//마지막에 있는게 딱 나왔다. 그럼 엠티잖아. 새롭게 할당할 수 는 없지
+	// 그 스택에 쌓여있던걸 써야되는 거야. 
+
+	if (m_PotentialTargetStack.empty() && !SelectFineAttackPos())
+	{
+		m_GameMode = HUNTMODE;
+		do
+		{
+			firstTargetMode = 1;
+			SelectHighPoint();
+			/*m_AttackPos.x = rand() % MAX_HORIZONTAL;
+			m_AttackPos.y = rand() % MAX_VERTICAL;*/
+		} while (!SelectFineAttackPos());
+	}
+	break;
+	default:
+	break;
+	}
+
+	return m_AttackPos;
+}
+
+void Player::ChooseRandPosWithPairity()
+{
+	while (true)
+	{
+		m_AttackPos.x = rand() % MAX_HORIZONTAL;
+		m_AttackPos.y = rand() % MAX_VERTICAL;
+
+		if ((m_AttackPos.x + m_AttackPos.y) % 2 == 0)
+		{
+			break;
+		}
+	}
+
 }
 
 

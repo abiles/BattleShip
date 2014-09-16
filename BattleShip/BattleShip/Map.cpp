@@ -24,6 +24,8 @@ void Map::MakeMap()
 	{
 		m_Map[i] = new char[MAX_VERTICAL];
 	}
+
+	InitMap();
 	return;
 }
 

@@ -24,6 +24,8 @@ public:
 
 	//공격
 	ShipPos		 SelectPosToAttack();
+	ShipPos		 ChooseAttackPos();
+	void		 ChooseRandPosWithPairity();
 	bool		 SelectFineAttackPos();
 	void		 SetAttackedResultFromGM(HitResult inputHitResult);
 	ShipPos		 GetAttackPos() const { return m_AttackPos; }
@@ -81,11 +83,13 @@ public:
 private:
 	//공격
 	ShipPos					m_AttackPos;
+	ShipPos					m_StartAttackPos;
+	ShipPos					m_AttackPosArr[2];
 	Map*					m_OtherPlayerMap;
 	HitResult				m_AttackedResultFromGM;
 	GameMode				m_GameMode;
 	int						m_OtherRemainShipCheck[SHIP_TYPE_END];
-	ShipPos					m_AttackPosArr[MAX_HORIZONTAL*MAX_VERTICAL];
+//	ShipPos					m_AttackPosArr[MAX_HORIZONTAL*MAX_VERTICAL];
 	HitResult				m_HitResultArr[MAX_HORIZONTAL*MAX_VERTICAL];
 	int						m_AttackTurn;
 	std::vector<Ship*>		m_ShipVector;
