@@ -10,7 +10,7 @@ enum GameMode
 
 enum GameNum
 {
-	GAMENUM = 1000000,
+	GAMENUM = 10,
 };
 
 
@@ -94,6 +94,7 @@ struct ShipPos
 	char x;
 	char y;
 };
+
 
 enum ShipSize
 {

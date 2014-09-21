@@ -8,10 +8,10 @@ public:
 	virtual ~Map();
 
 private:
-	void MakeMap();
-	void MakeIntMap();
-	void DeleteMap();
-	void DeleteIntMap();
+	void	  MakeMap();
+	void	  MakeIntMap();
+	void	  DeleteMap();
+	void	  DeleteIntMap();
 
 public:
 	void	  InitMap();
@@ -32,7 +32,7 @@ public:
 
 	void	  MarkAttackResult(ShipPos attackedPos, MapState inputMapState);
 private:
-	char**	   m_Map;
-	int**	   m_IntMap;
+	char    m_Map[MAX_HORIZONTAL][MAX_VERTICAL];
+	int	    m_IntMap[MAX_HORIZONTAL][MAX_VERTICAL];
 };
 

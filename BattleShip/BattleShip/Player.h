@@ -19,8 +19,6 @@ public:
 	bool		 IsOtherShipOverlap(ShipPos inputShipPos, ShipDirection inputDir, int shipIdx);
 	void		 ValidPosLauchToShip(ShipPos inputShipPos, ShipDirection inputDir, int shipIdx);
 	void		 ValidPosSetToMap(ShipPos inputShipPos, ShipDirection inputDir, int shipIdx);
-	void		 EdgeFixedAssignShips();
-	void		 EdgeFixedAssignShipsSecond();
 
 	//공격
 	ShipPos		 SelectPosToAttack();
@@ -41,8 +39,7 @@ public:
 	void		 InitAttackPos();
 	void		 InitOtherPlayerMap();
 	void		 InitRemainShip();
-	void		 InitAttakPosArr();
-	void		 InitHitResultArr();
+	
 	void		 InitAttackTurn();
 	void		 InitGameMode();
 	void		 InitAttackResultFromGM();
@@ -64,7 +61,7 @@ public:
 	void		 InitPlayerMap();
 	void		 InitShipPos();
 	void		 InitShipHP();
-	void		 InitAttackedPosArr();
+	
 	void		 InitPotentialStack();
 	void		 InitDefender();
 
@@ -96,7 +93,7 @@ private:
 	//std::vector<ShipPos*>	m_PotentialTargetVector;
 	std::stack<ShipPos>		m_PotentialTargetStack;
 	bool					m_PotentialTargetSetCheck;
-	Map*					m_PointMap;
+	
 
 	//방어
 	Map*					m_PlayerMap;

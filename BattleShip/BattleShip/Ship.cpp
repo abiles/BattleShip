@@ -64,10 +64,10 @@ void Ship::SetShipType(ShipType inputShipType)
 
 void Ship::MakeDir()
 {
-	m_ShipDir[NORTH]		  = { 0, -1 };
-	m_ShipDir[EAST]			  = { 1,  0 };
-	m_ShipDir[SOUTH]		  = { 0,  1 };
-	m_ShipDir[WEST]			  = {-1,  0 };
+	m_ShipDir[NORTH]		  = { -1,  0 };
+	m_ShipDir[EAST]			  = {  0,  1 };
+	m_ShipDir[SOUTH]		  = {  1,  0 };
+	m_ShipDir[WEST]			  = {  0, -1 };
 	
 }
 
@@ -183,11 +183,7 @@ ShipPos Ship::GetDirPos(ShipDirection inputDir)
 
 void Ship::InitPos()
 {
-	for (int i = 0; i < m_Size; ++i)
-	{
-		m_Pos[i].x = -1;
-		m_Pos[i].y = -1;
-	}
+	memset(m_Pos, -1, sizeof(ShipPos)* m_Size);
 }
 
 HitResult Ship::CheckAttack(ShipPos attackedPos)

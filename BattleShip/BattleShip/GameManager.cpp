@@ -69,52 +69,39 @@ void GameManager::PlayingGame()
 {
 	int totalTurnNum = 0;
 	int EachGameTurn = 0;
+	
 	for (int i = 0; i < GAMENUM; ++i)
 	{
 		m_Attacker->InitAttacker();
 		m_Defender->InitDefender();
-		if (i >= 0 && i < 3)
-		{
-			m_Defender->EdgeFixedAssignShips();
-		}
-		else if (i >= 3 && i< 7)
-		{
-			m_Defender->RandomAssignShips();
-		}
-		else if (i >= 7 && i<10)
-		{
-			m_Defender->EdgeFixedAssignShipsSecond();
-		}
-		else
-		{
-			m_Defender->RandomAssignShips();
-		}
 		
+		
+		m_Defender->RandomAssignShips();
 
 		while (!IsGameEnd())
 		{
 			//m_Defender->PrintMap();
 			m_AttackPosFromPlayer = m_Attacker->SelectPosToAttack();
-			
+			//m_AttackPosFromPlayer = m_Attacker->ChooseAttackPos();
 			//m_Attacker->SetAttackPosArr();
 			
 			m_Defender->SetAttackedPos(m_AttackPosFromPlayer);
 			//m_Defender->SetAttackedPosArr(m_AttackPosFromPlayer, EachGameTurn);
 			m_Defender->SetAttackedResult();
-			//system("cls");
-			//printf_s("%c %c", m_AttackPosFromPlayer.x + 'a', m_AttackPosFromPlayer.y+'0');
+			system("cls");
 			m_Defender->MakrAttackResultToPlayerMap(m_AttackPosFromPlayer);
 			m_AttackedResultFromDef = m_Defender->GetAttackedResult();
 			m_Attacker->SetAttackedResultFromGM(m_AttackedResultFromDef);
 			m_Attacker->MakrAttackResultToOtherPlayerMap();
 			m_Attacker->CheckRemainShip();
-			//m_Defender->PrintShips();
-			//HitResultPrint();
-			//m_Attacker->PrintOtherPlayerMap();
-			//m_Defender->PrintMap();
+			m_Defender->PrintShips();
+			HitResultPrint();
+			m_Attacker->PrintOtherPlayerMap();
+			m_Defender->PrintMap();
 			
 			++EachGameTurn;
 			
+		
 		}
 		
 		totalTurnNum += EachGameTurn;
@@ -170,7 +157,7 @@ void GameManager::NetworkGamePlaying()
 {
 	// Server IP & Port
 	const char*				IP = "10.73.42.117";	// 자기 컴퓨터에서 돌릴 때는 127.0.0.1
-	const unsigned short	PORT = 9001;
+	const unsigned short	PORT = 9000;
 
 	Network network;
 	PacketType type;
@@ -257,16 +244,7 @@ void GameManager::NetworkGamePlaying()
 
 
 			shipData = m_Player->ParseAssignShip();
-			/*for (int i = 0; m_Player->m_ShipVector.size(); ++i)
-			{
-				for (int j = 0; j < m_Player->m_ShipVector[i]->GetSize(); ++j)
-				{
-					tmpCoord.mX = m_Player->m_ShipVector[i]->GetPos(j).x;
-					tmpCoord.mY = m_Player->m_ShipVector[i]->GetPos(j).y;
-					shipData.SetShipCoord((ShipData::ShipType)(i + 1), j, tmpCoord);
-				}
-				
-			}*/
+		
 
 			shipData.ToMapData(mapData);
 
@@ -366,8 +344,8 @@ void GameManager::NetworkGamePlaying()
 											 printf_s("X: %d, Y: %d, RESULT: %s\n", attackResult.pos.mX, attackResult.pos.mY, 
 															 NetworkAttackResultPrint((HitResult)attackResult.attackResult));
 
-											// m_Player->PrintMap();
-											// m_Player->PrintOtherPlayerMap();
+											//m_Player->PrintMap();
+											//m_Player->PrintOtherPlayerMap();
 											 break;
 				}
 

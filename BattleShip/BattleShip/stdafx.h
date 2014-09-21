@@ -24,9 +24,9 @@
 #include <crtdbg.h>
 
 #ifdef _DEBUG
-#include <vld.h>
+//#include <vld.h>
 #pragma comment(lib, "BGNL_debug.lib")
-//#define new new(_CLIENT_BLOCK, __FILE__, __LINE__)
+#define new new(_CLIENT_BLOCK, __FILE__, __LINE__)
 #else
 #pragma comment(lib, "BGNL.lib")
 #endif

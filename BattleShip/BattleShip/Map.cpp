@@ -4,47 +4,51 @@
 
 Map::Map()
 {
-	MakeMap();
-	MakeIntMap();
+	
+	//MakeMap();
+	//MakeIntMap();
 }
 
 
 Map::~Map()
 {
-	DeleteMap();
-	DeleteIntMap();
+	//DeleteMap();
+	//DeleteIntMap();
 }
 
 
-void Map::MakeMap()
-{
-	m_Map = new char*[MAX_HORIZONTAL];
-
-	for (int i = 0; i < MAX_HORIZONTAL; ++i)
-	{
-		m_Map[i] = new char[MAX_VERTICAL];
-	}
-
-	InitMap();
-	return;
-}
-
-void Map::DeleteMap()
-{
-	for (int i = 0; i < MAX_HORIZONTAL; ++i)
-	{
-		delete[] m_Map[i];
-	}
-
-	delete[] m_Map;
-}
-
+//void Map::MakeMap()
+//{
+//	m_Map = new char*[MAX_HORIZONTAL];
+//
+//	for (int i = 0; i < MAX_HORIZONTAL; ++i)
+//	{
+//		m_Map[i] = new char[MAX_VERTICAL];
+//		
+//	}
+//
+//	InitMap();
+//	return;
+//}
+//
+//void Map::DeleteMap()
+//{
+//	for (int i = 0; i < MAX_HORIZONTAL; ++i)
+//	{
+//		delete[] m_Map[i];
+//		m_Map[i] = nullptr;
+//	}
+//
+//	delete[] m_Map;
+//	m_Map = nullptr;
+//}
+//
 void Map::InitMap()
 {
 
 	for (int i = 0; i < MAX_HORIZONTAL; ++i)
 	{
-		memset(m_Map[i], MAP_NONE, sizeof(char)*MAX_VERTICAL);
+		memset(m_Map[i], 0, sizeof(char)*MAX_VERTICAL);
 	}
 	return;
 }
@@ -235,26 +239,27 @@ void Map::SetEachPointInMap(char _x, char _y, int point)
 	SetEachPointInMap(tmpShip, point);
 }
 
-void Map::MakeIntMap()
-{
-	m_IntMap = new int*[MAX_HORIZONTAL];
-
-	for (int i = 0; i < MAX_HORIZONTAL; ++i)
-	{
-		m_IntMap[i] = new int[MAX_VERTICAL];
-	}
-	return;
-}
-
-void Map::DeleteIntMap()
-{
-	for (int i = 0; i < MAX_HORIZONTAL; ++i)
-	{
-		delete[] m_IntMap[i];
-	}
-
-	delete[] m_IntMap;
-}
+//void Map::MakeIntMap()
+//{
+//	m_IntMap = new int*[MAX_HORIZONTAL];
+//
+//	for (int i = 0; i < MAX_HORIZONTAL; ++i)
+//	{
+//		m_IntMap[i] = new int[MAX_VERTICAL];
+//	}
+//	InitIntMap();
+//	return;
+//}
+// 
+// void Map::DeleteIntMap()
+// {
+// 	for (int i = 0; i < MAX_HORIZONTAL; ++i)
+// 	{
+// 		delete[] m_IntMap[i];
+// 	}
+// 
+// 	delete[] m_IntMap;
+// }
 
 void Map::InitIntMap()
 {
