@@ -54,10 +54,9 @@ void GameManager::SetAttackPosFromPlayer(ShipPos inputPos)
 
 void GameManager::InitAttackPosFromPlayer()
 {
-	//m_AttackPosFromPlayer.x = -1;
-	//m_AttackPosFromPlayer.y = -1;
-	m_AttackPosFromPlayer.x = 0;
-	m_AttackPosFromPlayer.y = 0;
+	
+	m_AttackPosFromPlayer.x = -1;
+	m_AttackPosFromPlayer.y = -1;
 }
 
 void GameManager::InitAttackResultFromPlayer()
@@ -82,11 +81,7 @@ void GameManager::PlayingGame()
 		{
 			//m_Defender->PrintMap();
 			m_AttackPosFromPlayer = m_Attacker->SelectPosToAttack();
-			//m_AttackPosFromPlayer = m_Attacker->ChooseAttackPos();
-			//m_Attacker->SetAttackPosArr();
-			
 			m_Defender->SetAttackedPos(m_AttackPosFromPlayer);
-			//m_Defender->SetAttackedPosArr(m_AttackPosFromPlayer, EachGameTurn);
 			m_Defender->SetAttackedResult();
 			system("cls");
 			m_Defender->MakrAttackResultToPlayerMap(m_AttackPosFromPlayer);
@@ -98,10 +93,7 @@ void GameManager::PlayingGame()
 			HitResultPrint();
 			m_Attacker->PrintOtherPlayerMap();
 			m_Defender->PrintMap();
-			
 			++EachGameTurn;
-			
-		
 		}
 		
 		totalTurnNum += EachGameTurn;

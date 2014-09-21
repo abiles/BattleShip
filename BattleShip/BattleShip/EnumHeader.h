@@ -10,7 +10,7 @@ enum GameMode
 
 enum GameNum
 {
-	GAMENUM = 10,
+	GAMENUM = 2,
 };
 
 
@@ -117,7 +117,12 @@ enum ShipType
 	SHIP_TYPE_END,
 };
 
+enum HitPos
+{
+	MAX_HITPOS = DESTROYER_SIZE * 2 + CRUISER_SIZE + 
+				 BATTLESHIP_SZIE + AIRCRAFT_SIZE,
 
+};
 
 
 

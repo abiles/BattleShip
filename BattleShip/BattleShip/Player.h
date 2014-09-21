@@ -20,32 +20,33 @@ public:
 	void		 ValidPosLauchToShip(ShipPos inputShipPos, ShipDirection inputDir, int shipIdx);
 	void		 ValidPosSetToMap(ShipPos inputShipPos, ShipDirection inputDir, int shipIdx);
 
-	//공격
+	//공격 확실
 	ShipPos		 SelectPosToAttack();
-	ShipPos		 ChooseAttackPos();
+	ShipPos		 SelectPosWithHitVec();
 	void		 ChooseRandPosWithPairity();
+	void		 SetPotentialTarget();
+	void		 ChooseAttackDir();
 	bool		 SelectFineAttackPos();
 	void		 SetAttackedResultFromGM(HitResult inputHitResult);
-	ShipPos		 GetAttackPos() const { return m_AttackPos; }
-	void		 SetAttackPosArr();
 	void		 MakrAttackResultToOtherPlayerMap();
+
+	//공격 삭제 보류
+	
+	ShipPos		 GetAttackPos() const { return m_AttackPos; }
 	void		 CheckRemainShip();
-	GameMode	 ModeSelect();
-	ShipPos		 SelectPosWithoutRand();
-	void		 SetPotentialTarget();
-	void		 SelectHighPoint();
-	void		 PointWeightPlus(ShipPos inputShipPos, int point);
 	bool		 IsFullSizePosInMap(ShipSize inputSize);
+
+	void		 InitAttacker();
+	void		 InitHitPosVec();
+	void		 InitPotentialTargetStack();
 	void		 InitAttackPos();
 	void		 InitOtherPlayerMap();
 	void		 InitRemainShip();
-	
 	void		 InitAttackTurn();
 	void		 InitGameMode();
 	void		 InitAttackResultFromGM();
 	void		 InitPointMap();
 	void		 InitPoidtMapToZero();
-	void		 InitAttacker();
 
 	//방어
 	void		 SetAttackedPos(ShipPos attackedPos);
@@ -53,17 +54,16 @@ public:
 	bool		 IsReMainShipInPlayerMap();
 	HitResult	 GetAttackedResult() const { return m_AttackedResult; }
 	void	     SetAttackedResult();
-	void		 SetNetworAttackedResult(HitResult inputResult);
 	void		 SetAttackedPosArr(ShipPos attackedPos, int eachGameTurn);
 	bool		 IsAllShipDestroyed();
+	void		 SetNetworAttackedResult(HitResult inputResult);
+	
+	void		 InitDefender();
 	void		 InitAttackedResult();
 	void		 InitAttacekedPos();
 	void		 InitPlayerMap();
 	void		 InitShipPos();
 	void		 InitShipHP();
-	
-	void		 InitPotentialStack();
-	void		 InitDefender();
 
 	//프린트
 	void		 PrintShips();
@@ -81,25 +81,21 @@ private:
 	//공격
 	ShipPos					m_AttackPos;
 	ShipPos					m_StartAttackPos;
-	ShipPos					m_AttackPosArr[2];
 	Map*					m_OtherPlayerMap;
 	HitResult				m_AttackedResultFromGM;
 	GameMode				m_GameMode;
 	int						m_OtherRemainShipCheck[SHIP_TYPE_END];
-//	ShipPos					m_AttackPosArr[MAX_HORIZONTAL*MAX_VERTICAL];
-	HitResult				m_HitResultArr[MAX_HORIZONTAL*MAX_VERTICAL];
+	std::vector<ShipPos>	m_HitPosVec;
 	int						m_AttackTurn;
 	std::vector<Ship*>		m_ShipVector;
-	//std::vector<ShipPos*>	m_PotentialTargetVector;
 	std::stack<ShipPos>		m_PotentialTargetStack;
 	bool					m_PotentialTargetSetCheck;
+	ShipPos					m_PlayerDir[MAX_DIRECTION];
 	
-
 	//방어
 	Map*					m_PlayerMap;
 	ShipPos					m_PosAttackedFromOtherPlayer;
 	ShipPos					m_AttackedPosFromOtherPlayerArr[MAX_HORIZONTAL*MAX_VERTICAL];
-	
 	HitResult				m_AttackedResult;
 
 	//플레이어

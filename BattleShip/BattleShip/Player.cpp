@@ -23,7 +23,8 @@ Player::Player()
 	m_StartAttackPos.x = -1;
 	m_StartAttackPos.y = -1;
 	
-	memset(m_AttackPosArr, -1, sizeof(ShipPos)* 2);
+	m_HitPosVec.reserve(MAX_HITPOS);
+	
 
 }
 
@@ -42,7 +43,6 @@ Player::~Player()
 		m_OtherPlayerMap = nullptr;
 		
 	}
-
 
 
 
@@ -66,9 +66,6 @@ Player::~Player()
 
 void Player::RandomAssignShips()
 {
-	
-
-
 	int shipIdx = 0;
 	ShipPos StartPos = { 0, };
 	ShipDirection direction;
@@ -327,8 +324,6 @@ void Player::ValidPosSetToMap(ShipPos inputShipPos, ShipDirection inputDir, int 
 
 ShipPos Player::SelectPosToAttack()
 {
-	
-
 	++m_AttackTurn;
 
 	if (m_AttackedResultFromGM == HIT)
@@ -339,14 +334,9 @@ ShipPos Player::SelectPosToAttack()
 	switch (m_GameMode)
 	{
 	case HUNTMODE:
-	/*do 
-	{
-		SelectHighPoint();
-	} while (!SelectFineAttackPos());
-*/
 	ChooseRandPosWithPairity();
-
 	break;
+
 	case TARGETMODE:
 	if (m_AttackedResultFromGM == HIT)
 	{
@@ -360,21 +350,12 @@ ShipPos Player::SelectPosToAttack()
 		m_PotentialTargetStack.pop();
 
 	}
-
-	//마지막에 있는게 딱 나왔다. 그럼 엠티잖아. 새롭게 할당할 수 는 없지
-	// 그 스택에 쌓여있던걸 써야되는 거야. 
 	
 	if (m_PotentialTargetStack.empty() && !SelectFineAttackPos())
 	{
 		m_GameMode = HUNTMODE;
 
 		ChooseRandPosWithPairity();
-		//do
-		//{
-		//	SelectHighPoint();
-		//	/*m_AttackPos.x = rand() % MAX_HORIZONTAL;
-		//	m_AttackPos.y = rand() % MAX_VERTICAL;*/
-		//} while (!SelectFineAttackPos());
 	}
 	break;
 	default:
@@ -386,8 +367,6 @@ ShipPos Player::SelectPosToAttack()
 
 bool Player::SelectFineAttackPos()
 {
-
-
 
 	//if (m_OtherRemainShipCheck[DESTROYER] == 0 &&
 	//	m_OtherRemainShipCheck[CRUISER] == 0 &&
@@ -582,9 +561,7 @@ void Player::SetAttackedResultFromGM(HitResult inputHitResult)
 
 void Player::MakrAttackResultToOtherPlayerMap()
 {
-	//ShipPos movePos = { 0, };
 	ShipPos tmpAttackPos = m_AttackPos;
-
 
 	if (m_AttackedResultFromGM == MISS)
 	{
@@ -594,77 +571,7 @@ void Player::MakrAttackResultToOtherPlayerMap()
 	{
 		m_OtherPlayerMap->MarkAttackResult(m_AttackPos, SHIP_ATTACEKED);
 	}
-	/*switch (m_AttackedResultFromGM)
-	{
-	case HIT_NONE:
-	break;
-	case HIT:
-	m_OtherPlayerMap->MarkAttackResult(m_AttackPos, SHIP_ATTACEKED);
-	break;
-	case MISS:
-	m_OtherPlayerMap->MarkAttackResult(m_AttackPos, MISSED_ATTACK);
-	break;
-	case DESTROY:
-	break;
-	case AIRCRAFT_DESTROY:
-
-	movePos.x = m_AttackPosArr[m_AttackTurn - 1].x - tmpAttackPos.x;
-	movePos.y = m_AttackPosArr[m_AttackTurn - 1].y - tmpAttackPos.y;
 	
-	for (int i = 0; i < AIRCRAFT_SIZE; ++i)
-	{
-		m_OtherPlayerMap->MarkAttackResult(m_AttackPos, SHIP_DESTROYED);
-		tmpAttackPos.x += movePos.x;
-		tmpAttackPos.y += movePos.y;
-
-	}
-	break;
-
-	case BATTLESHIP_DESTROY:
-	movePos.x = m_AttackPosArr[m_AttackTurn - 1].x - tmpAttackPos.x;
-	movePos.y = m_AttackPosArr[m_AttackTurn - 1].y - tmpAttackPos.y;
-
-	for (int i = 0; i < BATTLESHIP_SZIE; ++i)
-	{
-		m_OtherPlayerMap->MarkAttackResult(m_AttackPos, SHIP_DESTROYED);
-		tmpAttackPos.x += movePos.x;
-		tmpAttackPos.y += movePos.y;
-
-	}
-	break;
-
-	case CRUISER_DESTROY:
-	movePos.x = m_AttackPosArr[m_AttackTurn - 1].x - tmpAttackPos.x;
-	movePos.y = m_AttackPosArr[m_AttackTurn - 1].y - tmpAttackPos.y;
-
-	for (int i = 0; i < CRUISER_SIZE; ++i)
-	{
-		m_OtherPlayerMap->MarkAttackResult(m_AttackPos, SHIP_DESTROYED);
-		tmpAttackPos.x += movePos.x;
-		tmpAttackPos.y += movePos.y;
-	}
-	break;
-
-	case DESTROYER_DESTROY:
-	movePos.x = m_AttackPosArr[m_AttackTurn - 1].x - tmpAttackPos.x;
-	movePos.y = m_AttackPosArr[m_AttackTurn - 1].y - tmpAttackPos.y;
-
-	for (int i = 0; i < DESTROYER_SIZE; ++i)
-	{
-		m_OtherPlayerMap->MarkAttackResult(m_AttackPos, SHIP_DESTROYED);
-		tmpAttackPos.x += movePos.x;
-		tmpAttackPos.y += movePos.y;
-
-	}
-	break;
-	case HITREUSLT_MAX:
-	break;
-	default:
-	break;
-	}*/
-
-
-
 }
 
 bool Player::IsAllShipDestroyed()
@@ -731,10 +638,16 @@ void Player::InitPlayerMap()
 
 void Player::InitShipPos()
 {
-	for (std::vector<Ship*>::size_type i = 0; i < m_ShipVector.size(); ++i)
+
+	for (auto pShip : m_ShipVector)
 	{
-		m_ShipVector[i]->InitPos();
+		pShip->InitPos();
 	}
+
+	//for (std::vector<Ship*>::size_type i = 0; i < m_ShipVector.size(); ++i)
+	//{
+	//	m_ShipVector[i]->InitPos();
+	//}
 }
 
 void Player::InitAttacker()
@@ -743,17 +656,10 @@ void Player::InitAttacker()
 	InitAttackResultFromGM();
 	InitOtherPlayerMap();
 	InitRemainShip();
-	memset(m_AttackPosArr, -1, sizeof(ShipPos)* 2);
-	
-	while (!m_PotentialTargetStack.empty())
-	{
-		m_PotentialTargetStack.pop();
-	}
-	//InitHitResultArr();
-	//InitAttakPosArr();
+	InitHitPosVec();
 	InitAttackTurn();
 	InitGameMode();
-	//순서중요
+	
 
 }
 
@@ -769,10 +675,16 @@ void Player::InitDefender()
 
 void Player::InitShipHP()
 {
-	for (std::vector<Ship*>::size_type i = 0; i < m_ShipVector.size(); ++i)
+
+	for (auto pShip : m_ShipVector)
 	{
-		m_ShipVector[i]->InitHP();
+		pShip->InitHP();
 	}
+
+	//for (std::vector<Ship*>::size_type i = 0; i < m_ShipVector.size(); ++i)
+	//{
+	//	m_ShipVector[i]->InitHP();
+	//}
 }
 
 void Player::MakrAttackResultToPlayerMap(ShipPos attackedPos)
@@ -922,10 +834,7 @@ void Player::SetAttackedPosArr(ShipPos attackedPos, int eachGameTurn)
 	m_AttackedPosFromOtherPlayerArr[eachGameTurn] = attackedPos;
 }
 
-void Player::SetAttackPosArr()
-{
-	m_AttackPosArr[m_AttackTurn] = m_AttackPos;
-}
+
 
 void Player::InitAttackTurn()
 {
@@ -964,26 +873,6 @@ void Player::PrintOtherPlayerMap()
 	m_OtherPlayerMap->PrintMapData();
 }
 
-GameMode Player::ModeSelect()
-{
-	GameMode tmpMode = HUNTMODE;
-
-	/*if (m_AttackedResultFromGM == HIT)
-	{
-		tmpMode = TARGETMODE;
-	}
-	else if (m_GameMode == TARGETMODE && m_AttackedResultFromGM == MISS)
-	{
-		tmpMode = TARGETMODE;
-	}
-	else
-	{
-		tmpMode = HUNTMODE;
-	}*/
-
-	return tmpMode;
-
-}
 
 void Player::SetPotentialTarget()
 {
@@ -1028,15 +917,7 @@ void Player::SetPotentialTarget()
 	
 }
 
-void Player::InitPotentialStack()
-{
-	m_PotentialTargetSetCheck = false;
-	while (!m_PotentialTargetStack.empty())
-	{
-		m_PotentialTargetStack.pop();
-	}
 
-}
 
 bool Player::IsReMainShipInPlayerMap()
 {
@@ -1089,16 +970,6 @@ bool Player::IsFullSizePosInMap(ShipSize inputSize)
 	return true;
 }
 
-
-
-
-
-
-
-
-
-
-
 void Player::InitPlayer()
 {
 	InitDefender();
@@ -1108,6 +979,13 @@ void Player::InitPlayer()
 
 void Player::SetNetworAttackedResult(HitResult inputResult)
 {
+	_ASSERT(inputResult < HITREUSLT_MAX &&
+		inputResult >= 0);
+
+	if (!(inputResult < HITREUSLT_MAX &&inputResult >= 0))
+	{
+		m_AttackedResult = HIT_NONE;
+	}
 	m_AttackedResult = inputResult;
 
 }
@@ -1130,113 +1008,7 @@ ShipData Player::ParseAssignShip()
 	return shipData;
 }
 
-ShipPos Player::ChooseAttackPos()
-{
-	static int firstTargetMode = 1;
-	ShipPos dirPos;
-	++m_AttackTurn;
 
-	if (m_AttackedResultFromGM == HIT)
-	{
-		m_GameMode = TARGETMODE;
-	}
-
-	switch (m_GameMode)
-	{
-	case HUNTMODE:
-	/*do
-	{
-		ChooseRandPosWithPairity();
-	} while (!SelectFineAttackPos())*/;
-
-	ChooseRandPosWithPairity();
-	
-	break;
-	case TARGETMODE:
-	if (firstTargetMode == 1)
-	{
-		SetPotentialTarget();
-		if (!(m_PotentialTargetStack.empty()))
-		{
-			m_StartAttackPos = m_AttackPos;
-			m_AttackPosArr[0] = m_StartAttackPos;
-			m_AttackPos = m_PotentialTargetStack.top();
-			m_PotentialTargetStack.pop();
-		}
-		firstTargetMode = 0;
-	}
-	else if (m_AttackedResultFromGM == HIT && m_PotentialTargetStack.empty())
-	{
-		SetPotentialTarget();
-		if (!(m_PotentialTargetStack.empty()))
-		{
-			m_StartAttackPos = m_AttackPos;
-			m_AttackPosArr[0] = m_StartAttackPos;
-			m_AttackPos = m_PotentialTargetStack.top();
-			m_PotentialTargetStack.pop();
-		}
-		//firstTargetMode = 0;
-	}
-	else if (m_AttackedResultFromGM == HIT)
-	{
-		if (m_AttackPosArr[1].x == -1)
-		{
-			m_AttackPosArr[1] = m_AttackPos;
-
-		}
-		else
-		{
-			m_AttackPosArr[0] = m_AttackPosArr[1];
-			m_AttackPosArr[1] = m_AttackPos;
-		}
-
-		dirPos.x = m_AttackPosArr[1].x - m_AttackPosArr[0].x;
-		dirPos.y = m_AttackPosArr[1].y - m_AttackPosArr[0].y;
-
-		m_AttackPos.x += dirPos.x;
-		m_AttackPos.y += dirPos.y;
-
-		if (!SelectFineAttackPos())
-		{
-			if (!(m_PotentialTargetStack.empty()))
-			{
-				m_AttackPos = m_PotentialTargetStack.top();
-				m_PotentialTargetStack.pop();
-			}
-		}
-	}
-	else
-	{
-		if (!(m_PotentialTargetStack.empty()))
-		{
-			m_AttackPos = m_PotentialTargetStack.top();
-			m_PotentialTargetStack.pop();
-		}
-	}
-
-
-
-	//마지막에 있는게 딱 나왔다. 그럼 엠티잖아. 새롭게 할당할 수 는 없지
-	// 그 스택에 쌓여있던걸 써야되는 거야. 
-
-	if (m_PotentialTargetStack.empty() && !SelectFineAttackPos())
-	{
-		m_GameMode = HUNTMODE;
-		firstTargetMode = 1;
-		memset(m_AttackPosArr, -1, sizeof(ShipPos)* 2);
-		ChooseRandPosWithPairity();
-		/*do
-		{
-			
-		} while (!SelectFineAttackPos());*/
-	}
-	break;
-	default:
-	break;
-	}
-
-	return m_AttackPos;
-}
 
 void Player::ChooseRandPosWithPairity()
 {
@@ -1259,7 +1031,7 @@ void Player::ChooseRandPosWithPairity()
 
 		}
 		else if (m_OtherRemainShipCheck[DESTROYER] == 0 &&
-				 m_OtherRemainShipCheck[CRUISER] == 0)
+			m_OtherRemainShipCheck[CRUISER] == 0)
 		{
 			if ((m_AttackPos.x + m_AttackPos.y) % BATTLESHIP_SZIE == 0
 				&& SelectFineAttackPos())
@@ -1291,7 +1063,7 @@ void Player::ChooseRandPosWithPairity()
 			break;
 		}
 
-	
+
 	}
 
 
@@ -1308,5 +1080,113 @@ void Player::ChooseRandPosWithPairity()
 	}
 
 }
+
+void Player::InitHitPosVec()
+{
+	m_HitPosVec.clear();
+}
+
+void Player::InitPotentialTargetStack()
+{
+
+	while (!m_PotentialTargetStack.empty())
+	{
+		m_PotentialTargetStack.pop();
+	}
+}
+
+ShipPos Player::SelectPosWithHitVec()
+{
+	++m_AttackTurn;
+
+	if (!(m_AttackedResultFromGM == HIT_NONE ||
+		m_AttackedResultFromGM == MISS))
+	{
+		m_HitPosVec.push_back(m_AttackPos);
+		m_GameMode = TARGETMODE;
+	}
+
+	switch (m_GameMode)
+	{
+	case HUNTMODE:
+	ChooseRandPosWithPairity();
+	break;
+	case TARGETMODE:
+
+	break;
+	default:
+	break;
+	}
+}
+
+void Player::ChooseAttackDir()
+{
+	
+
+	int northSize = 0, southSize = 0, 
+		eastSize = 0, westSize = 0;
+
+	for (int i = (m_AttackPos.x)-1; i >= 0; --i)
+	{
+		if (m_OtherPlayerMap->GetEachPosDataInMap(i, m_AttackPos.y) == MAP_NONE)
+		{
+			++northSize;
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	for (int i = (m_AttackPos.x) + 1; i < MAX_HORIZONTAL; ++i)
+	{
+		if (m_OtherPlayerMap->GetEachPosDataInMap(i,m_AttackPos.y) == MAP_NONE)
+		{
+			++southSize;
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	for (int i = (m_AttackPos.y) + 1; i < MAX_VERTICAL; ++i)
+	{
+		if (m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos.x, i) == MAP_NONE)
+		{
+			++eastSize;
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	for (int i = (m_AttackPos.y) - 1; i >= 0; --i)
+	{
+		if (m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos.x, i) == MAP_NONE)
+		{
+			++westSize;
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	
+	if (northSize == 0 && southSize == 0 && eastSize == 0 && westSize == 0)
+	{
+		; // 이런게 있을 수가 있나. 
+	}
+
+	int biggerSize = northSize >= southSize ? northSize : southSize;
+	int biggerSize2 = eastSize >= westSize ? eastSize : westSize;
+	int biggestSize = biggerSize >= biggerSize2 ? biggerSize : biggerSize2;
+	
+
+}
+
+
 
 
