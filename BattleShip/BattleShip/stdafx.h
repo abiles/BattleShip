@@ -15,18 +15,19 @@
 #include <string>
 #include <time.h>
 #include <vector>
+#include <list>
 #include <stack>
 #include <conio.h>
-#include "Network.h"
-#include "PacketType.h"
-#include "ShipData.h"
+//#include "Network.h"
+//#include "PacketType.h"
+//#include "ShipData.h"
 #include <Windows.h>
 #include <crtdbg.h>
 
 #ifdef _DEBUG
 //#include <vld.h>
-#pragma comment(lib, "BGNL_debug.lib")
+//#pragma comment(lib, "BGNL_debug.lib")
 #define new new(_CLIENT_BLOCK, __FILE__, __LINE__)
 #else
-#pragma comment(lib, "BGNL.lib")
+//#pragma comment(lib, "BGNL.lib")
 #endif

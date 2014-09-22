@@ -22,13 +22,15 @@ public:
 
 	//공격 확실
 	ShipPos		 SelectPosToAttack();
-	ShipPos		 SelectPosWithHitVec();
+	ShipPos		 SelectPosWithHitList();
+	void	     SelectPosWhenDestroyed(ShipSize _size);
 	void		 ChooseRandPosWithPairity();
 	void		 SetPotentialTarget();
 	void		 ChooseAttackDir();
 	bool		 SelectFineAttackPos();
 	void		 SetAttackedResultFromGM(HitResult inputHitResult);
 	void		 MakrAttackResultToOtherPlayerMap();
+	void		 MakePlayerDir();
 
 	//공격 삭제 보류
 	
@@ -37,7 +39,7 @@ public:
 	bool		 IsFullSizePosInMap(ShipSize inputSize);
 
 	void		 InitAttacker();
-	void		 InitHitPosVec();
+	void		 InitHitList();
 	void		 InitPotentialTargetStack();
 	void		 InitAttackPos();
 	void		 InitOtherPlayerMap();
@@ -45,8 +47,7 @@ public:
 	void		 InitAttackTurn();
 	void		 InitGameMode();
 	void		 InitAttackResultFromGM();
-	void		 InitPointMap();
-	void		 InitPoidtMapToZero();
+	void		 InitStartAttPos();
 
 	//방어
 	void		 SetAttackedPos(ShipPos attackedPos);
@@ -73,7 +74,7 @@ public:
 	//플레이어
 	void		 InitPlayer();
 	char*		 GetNetworkMap(){ return m_NetworkMap; }
-	ShipData	 ParseAssignShip();
+	//ShipData	 ParseAssignShip();
 	
 
 
@@ -85,12 +86,13 @@ private:
 	HitResult				m_AttackedResultFromGM;
 	GameMode				m_GameMode;
 	int						m_OtherRemainShipCheck[SHIP_TYPE_END];
-	std::vector<ShipPos>	m_HitPosVec;
 	int						m_AttackTurn;
 	std::vector<Ship*>		m_ShipVector;
 	std::stack<ShipPos>		m_PotentialTargetStack;
 	bool					m_PotentialTargetSetCheck;
 	ShipPos					m_PlayerDir[MAX_DIRECTION];
+	ShipPos					m_AttackDir;
+	std::vector<ShipPos>    m_HitList;
 	
 	//방어
 	Map*					m_PlayerMap;
