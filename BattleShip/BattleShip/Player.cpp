@@ -38,6 +38,7 @@ Player::~Player()
 		m_PlayerMap = nullptr;
 
 	}
+
 	if (m_OtherPlayerMap)
 	{
 		delete   m_OtherPlayerMap;
@@ -57,7 +58,7 @@ Player::~Player()
 		}
 		else
 		{
-			iterShip = m_ShipVector.erase(iterShip);
+			++iterShip; 
 		}
 	}
 
@@ -79,7 +80,7 @@ void Player::RandomAssignShips()
 
 		if (IsValidPos(StartPos, direction, shipIdx))
 		{
-			
+
 			ValidPosLauchToShip(StartPos, direction, shipIdx);
 			ValidPosSetToMap(StartPos, direction, shipIdx);
 			shipIdx++;
@@ -323,48 +324,6 @@ void Player::ValidPosSetToMap(ShipPos inputShipPos, ShipDirection inputDir, int 
 
 }
 
-ShipPos Player::SelectPosToAttack()
-{
-	++m_AttackTurn;
-
-	if (m_AttackedResultFromGM == HIT)
-	{
-		m_GameMode = TARGETMODE;
-	}
-
-	switch (m_GameMode)
-	{
-	case HUNTMODE:
-	ChooseRandPosWithPairity();
-	break;
-
-	case TARGETMODE:
-	if (m_AttackedResultFromGM == HIT)
-	{
-		SetPotentialTarget();
-	}
-
-	
-	while (!(m_PotentialTargetStack.empty()) && !SelectFineAttackPos())
-	{
-		m_AttackPos = m_PotentialTargetStack.top();
-		m_PotentialTargetStack.pop();
-
-	}
-	
-	if (m_PotentialTargetStack.empty() && !SelectFineAttackPos())
-	{
-		m_GameMode = HUNTMODE;
-
-		ChooseRandPosWithPairity();
-	}
-	break;
-	default:
-	break;
-	}
-	
-	return m_AttackPos;
-}
 
 bool Player::SelectFineAttackPos()
 {
@@ -422,6 +381,7 @@ void Player::SetAttackedResult()
 	{
 		m_AttackedResult = MISS;
 	}*/
+
 	HitResult tmpHitResult;
 	m_AttackedResult = HIT_NONE;
 	
@@ -677,48 +637,7 @@ void Player::PrintOtherPlayerMap()
 }
 
 
-void Player::SetPotentialTarget()
-{
-	
-	//m_PotentialTargetSetCheck = true;
-	if (m_AttackPos.y-1 >= VERTICAL_ZERO &&
-		m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos.x, m_AttackPos.y-1) == MAP_NONE)
-	{
-		ShipPos tmpPos;
-		tmpPos.x = m_AttackPos.x;
-		tmpPos.y = m_AttackPos.y-1;
-		m_PotentialTargetStack.push(tmpPos);
-	}
 
-	if (m_AttackPos.x +1 < MAX_HORIZONTAL &&
-		m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos.x +1, m_AttackPos.y) == MAP_NONE)
-	{
-		ShipPos tmpPos;
-		tmpPos.x = m_AttackPos.x+1;
-		tmpPos.y = m_AttackPos.y;
-		m_PotentialTargetStack.push(tmpPos);
-	}
-
-	if (m_AttackPos.y+1 < MAX_VERTICAL &&
-		m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos.x, m_AttackPos.y +1) == MAP_NONE)
-	{
-		ShipPos tmpPos;
-		tmpPos.x = m_AttackPos.x;
-		tmpPos.y = m_AttackPos.y+1;
-		m_PotentialTargetStack.push(tmpPos);
-	}
-
-	if (m_AttackPos.x -1 >= HORIZONTAL_ZERO &&
-		m_OtherPlayerMap->GetEachPosDataInMap(m_AttackPos.x - 1, m_AttackPos.y) == MAP_NONE)
-	{
-		ShipPos tmpPos;
-		tmpPos.x = m_AttackPos.x - 1;
-		tmpPos.y = m_AttackPos.y;
-		m_PotentialTargetStack.push(tmpPos);
-	}
-
-	
-}
 
 
 
@@ -793,23 +712,23 @@ void Player::SetNetworAttackedResult(HitResult inputResult)
 
 }
 
-//ShipData Player::ParseAssignShip()
-//{
-//	ShipData shipData;
-//	Coord tmpCoord;
-//
-//	for (unsigned int i = 0; i < m_ShipVector.size(); ++i)
-//	{
-//		for (int j = 0; j < m_ShipVector[i]->GetSize(); ++j)
-//		{
-//			tmpCoord.mX = m_ShipVector[i]->GetPos(j).x;
-//			tmpCoord.mY = m_ShipVector[i]->GetPos(j).y;
-//			shipData.SetShipCoord((ShipData::ShipType)(i + 1), j, tmpCoord);
-//		}
-//	}
-//
-//	return shipData;
-//}
+ShipData Player::ParseAssignShip()
+{
+	ShipData shipData;
+	Coord tmpCoord;
+
+	for (unsigned int i = 0; i < m_ShipVector.size(); ++i)
+	{
+		for (int j = 0; j < m_ShipVector[i]->GetSize(); ++j)
+		{
+			tmpCoord.mX = m_ShipVector[i]->GetPos(j).x;
+			tmpCoord.mY = m_ShipVector[i]->GetPos(j).y;
+			shipData.SetShipCoord((ShipData::ShipType)(i + 1), j, tmpCoord);
+		}
+	}
+
+	return shipData;
+}
 
 
 
@@ -886,14 +805,7 @@ void Player::ChooseRandPosWithPairity()
 
 
 
-void Player::InitPotentialTargetStack()
-{
 
-	while (!m_PotentialTargetStack.empty())
-	{
-		m_PotentialTargetStack.pop();
-	}
-}
 
 ShipPos Player::SelectPosWithHitList()
 {
