@@ -77,8 +77,6 @@ void GameManager::PlayingGame()
 
 		while (!IsGameEnd())
 		{
-			//m_Defender->PrintMap();
-			//m_AttackPosFromPlayer = m_Attacker->SelectPosToAttack();
 			m_AttackPosFromPlayer = m_Attacker->SelectPosWithHitList();
 			m_Defender->SetAttackedPos(m_AttackPosFromPlayer);
 			m_Defender->SetAttackedResult();

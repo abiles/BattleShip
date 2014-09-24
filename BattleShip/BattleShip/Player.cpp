@@ -370,8 +370,7 @@ void Player::SetAttackedPos(ShipPos attackedPos)
 
 void Player::SetAttackedResult()
 {
-	//전체 배를 돌면서 어디에 맞았는지 확인 하는 거야? 
-	//왜?
+	
 
 	/*if (m_PlayerMap->GetEachPosDataInMap(m_PosAttackedFromOtherPlayer) == SHIP_ATTACEKED)
 	{
@@ -843,9 +842,16 @@ ShipPos Player::SelectPosWithHitList()
 				m_AttackPos.y += m_AttackDir.y;
 				if (!SelectFineAttackPos())
 				{
-					ChooseAttackDir();
-					m_AttackPos.x = m_StartAttackPos.x + m_AttackDir.x;
-					m_AttackPos.y = m_StartAttackPos.y + m_AttackDir.y;
+					if (ChooseAttackDir())
+					{
+						m_AttackPos.x = m_StartAttackPos.x + m_AttackDir.x;
+						m_AttackPos.y = m_StartAttackPos.y + m_AttackDir.y;
+					}
+					else
+					{
+						ChooseRandPosWithPairity();
+						m_StartAttackPos = m_AttackPos;
+					}
 				}
 				
 			}
@@ -856,9 +862,16 @@ ShipPos Player::SelectPosWithHitList()
 				m_AttackPos.y += m_AttackDir.y;
 				if (!SelectFineAttackPos())
 				{
-					ChooseAttackDir();
-					m_AttackPos.x = m_StartAttackPos.x + m_AttackDir.x;
-					m_AttackPos.y = m_StartAttackPos.y + m_AttackDir.y;
+					if (ChooseAttackDir())
+					{
+						m_AttackPos.x = m_StartAttackPos.x + m_AttackDir.x;
+						m_AttackPos.y = m_StartAttackPos.y + m_AttackDir.y;
+					}
+					else
+					{
+						ChooseRandPosWithPairity();
+						m_StartAttackPos = m_AttackPos;
+					}
 				}
 			}
 			else if (m_AttackedResultFromGM == MISS)
@@ -870,11 +883,19 @@ ShipPos Player::SelectPosWithHitList()
 
 				m_AttackPos.x = m_StartAttackPos.x + m_AttackDir.x;
 				m_AttackPos.y = m_StartAttackPos.y + m_AttackDir.y;
+
 				if (!SelectFineAttackPos())
 				{
-					ChooseAttackDir();
-					m_AttackPos.x = m_StartAttackPos.x + m_AttackDir.x;
-					m_AttackPos.y = m_StartAttackPos.y + m_AttackDir.y;
+					if (ChooseAttackDir())
+					{
+						m_AttackPos.x = m_StartAttackPos.x + m_AttackDir.x;
+						m_AttackPos.y = m_StartAttackPos.y + m_AttackDir.y;
+					}
+					else
+					{
+						ChooseRandPosWithPairity();
+						m_StartAttackPos = m_AttackPos;
+					}
 
 				}
 
@@ -909,7 +930,7 @@ ShipPos Player::SelectPosWithHitList()
 	return m_AttackPos;
 }
 
-void Player::ChooseAttackDir()
+bool Player::ChooseAttackDir()
 {
 	/*
 	현재 공격 위치에서 가장 공격할 여지가 많은 방향을 알 수 있다. 
@@ -967,6 +988,7 @@ void Player::ChooseAttackDir()
 		}
 	}
 
+	
 
 
 	for (int dir = 0; dir < MAX_DIRECTION; ++dir)
@@ -977,11 +999,16 @@ void Player::ChooseAttackDir()
 			biggestDir = (ShipDirection)dir;
 		}
 	}
-	
-	m_AttackDir = m_PlayerDir[biggestDir];
-	//dir 이 공격 방향이 된다. 
 
+	if (biggestSize == 0)
+	{
+		return false;
+	}
 	
+	//가장 많이 남은 쪽 dir이 공격 방향이 된다. 
+	m_AttackDir = m_PlayerDir[biggestDir];
+
+	return true;
 
 }
 

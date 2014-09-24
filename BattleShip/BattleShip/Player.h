@@ -25,7 +25,7 @@ public:
 	void	     SelectPosWhenDestroyed(ShipSize _size);
 	void		 ChooseRandPosWithPairity();
 	
-	void		 ChooseAttackDir();
+	bool		 ChooseAttackDir();
 	bool		 SelectFineAttackPos();
 	void		 SetAttackedResultFromGM(HitResult inputHitResult);
 	void		 MakrAttackResultToOtherPlayerMap();
