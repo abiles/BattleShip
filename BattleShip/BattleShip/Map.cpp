@@ -5,44 +5,17 @@
 Map::Map()
 {
 	
-	//MakeMap();
-	//MakeIntMap();
+
 }
 
 
 Map::~Map()
 {
-	//DeleteMap();
-	//DeleteIntMap();
+	
 }
 
 
-//void Map::MakeMap()
-//{
-//	m_Map = new char*[MAX_HORIZONTAL];
-//
-//	for (int i = 0; i < MAX_HORIZONTAL; ++i)
-//	{
-//		m_Map[i] = new char[MAX_VERTICAL];
-//		
-//	}
-//
-//	InitMap();
-//	return;
-//}
-//
-//void Map::DeleteMap()
-//{
-//	for (int i = 0; i < MAX_HORIZONTAL; ++i)
-//	{
-//		delete[] m_Map[i];
-//		m_Map[i] = nullptr;
-//	}
-//
-//	delete[] m_Map;
-//	m_Map = nullptr;
-//}
-//
+
 void Map::InitMap()
 {
 
